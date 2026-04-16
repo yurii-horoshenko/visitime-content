@@ -25,24 +25,31 @@ claude --agent {architect-id} -p "запрос" --output-format text --max-turns
 claude --agent {qa-id} -p "запрос" --output-format text --max-turns 5
 ```
 
-## Автосчётчик задач
+## Создание задач → Linear
 
-Перед созданием задачи — прочитай счётчик платформы:
-```bash
-cat tasks/{platform}/.counter 2>/dev/null || echo "0"
-```
-После создания — обнови:
-```bash
-echo "{новый_номер}" > tasks/{platform}/.counter
+Задачи создаются в Linear (не файлы). Используй скилл `linear-task`.
+
+```python
+# Создать задачу в Todo
+result = linear("""
+mutation($input: IssueCreateInput!) {
+  issueCreate(input: $input) {
+    success
+    issue { identifier url }
+  }
+}
+""", {"input": {
+    "teamId": "2b130448-21d2-4167-9313-06187182a62e",
+    "title": "[TikTok] Название видео/задачи",
+    "description": "## Goal\n...\n\n## Platform\ntiktok / instagram / youtube\n\n## Acceptance Criteria\n- [ ] ...",
+    "priority": 3,
+    "stateId": "7a523508-ce78-4b51-bb38-a8c6fa4b2db6",  # Todo
+    "labelIds": ["3bcfa39f-20fc-46f7-9902-c87e3d99cbf8"]  # Feature
+}})
+print(result["data"]["issueCreate"]["issue"]["identifier"])  # VIS-1
 ```
 
-## Автосчётчик Use Cases
-
-```bash
-# Инициализировать если нет
-[ -f docs/use-cases/.counter ] || echo "0" > docs/use-cases/.counter
-cat docs/use-cases/.counter
-```
+Идентификатор задачи: `VIS-XXX` (автоматически из Linear).
 
 ## Приоритизация задач
 
