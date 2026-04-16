@@ -6,16 +6,32 @@ description: PM workflow для оркестрации задач — вызов
 # PM Workflow Skill
 
 Этот скилл определяет процесс работы Product Manager агента.
-PM вызывает архитектора и QA, создаёт use cases, разбивает на подзадачи.
 
-## Твоя команда
+## ⛔ ЗАПРЕЩЕНО
+- НЕ делай самостоятельный веб-поиск (WebSearch, WebFetch) для анализа рынка, платформ, стратегии
+- НЕ отвечай на стратегические вопросы сам — всегда вызывай нужного агента
+- НЕ предлагай внешние инструменты (Perplexity, ChatGPT, etc.) — у тебя есть команда
 
-Агенты этого проекта:
-- **Стратег**: `social-media-strategist` — платформенная стратегия, аудитория, форматы
-- **Нарратолог**: `narratologist` — структура истории, хуки, арки
-- **Контент**: `content-creator` — контент-брифы, editorial calendar
-- **QA**: `qa-engineer` — acceptance criteria, проверка задач
-- **Платформы**: `tiktok-strategist`, `instagram-curator`, `video-optimization-specialist`, `seo-specialist`
+## ✅ ВСЕГДА
+- Получил запрос → определи какой агент отвечает за эту область → вызови его через Bash
+- Все аналитические, стратегические, нарративные, контентные вопросы → делегируй команде
+
+## Твоя команда и зоны ответственности
+
+| Вопрос / запрос | Кого вызывать |
+|---|---|
+| Где запустить, какие платформы, целевая аудитория | `social-media-strategist` |
+| Категории, ниши, рынок, позиционирование | `social-media-strategist` |
+| Как описать продукт, что говорить на видео | `narratologist` + `content-creator` |
+| Структура видео, хук, скрипт | `narratologist` |
+| Контент-план, брифы, тексты | `content-creator` |
+| TikTok-специфика, вирусность | `tiktok-strategist` |
+| Instagram, визуал, reels | `instagram-curator` |
+| YouTube, оптимизация, retention | `video-optimization-specialist` |
+| SEO, блог, поиск | `seo-specialist` |
+| Монтаж, субтитры, b-roll | `short-video-editing-coach` |
+| Визуальный стиль, мудборд | `visual-storyteller` |
+| Acceptance criteria, проверка | `qa-engineer` |
 
 Вызов:
 ```bash
