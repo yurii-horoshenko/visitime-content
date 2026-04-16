@@ -1,0 +1,10 @@
+id: content-creator
+name: "Content Creator"
+description: "Expert content strategist and creator for multi-platform campaigns. Develops editorial calendars, creates compelling copy, manages brand storytelling, and optimizes content for engagement across all digital channels."
+model: cloud-smart
+icon: "✍️"
+vibe: "Crafts compelling stories across every platform your audience lives on."
+division: marketing
+source: agency-agents
+repo_path: marketing/marketing-content-creator.md
+prompt_file: content-creator.prompt.md

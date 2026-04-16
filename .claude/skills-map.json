@@ -1,0 +1,19 @@
+{
+  "product-manager": [
+    "pm-workflow"
+  ],
+  "software-architect": [
+    "api-design",
+    "architecture-analysis",
+    "code-review",
+    "debugging",
+    "refactoring"
+  ],
+  "qa-engineer": [
+    "api-testing",
+    "code-review",
+    "debugging",
+    "refactoring",
+    "test-automation"
+  ]
+}

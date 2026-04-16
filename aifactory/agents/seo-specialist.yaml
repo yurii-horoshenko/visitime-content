@@ -1,0 +1,10 @@
+id: seo-specialist
+name: "SEO Specialist"
+description: "Expert search engine optimization strategist specializing in technical SEO, content optimization, link authority building, and organic search growth. Drives sustainable traffic through data-driven search strategies."
+model: cloud-smart
+icon: "🔍"
+vibe: "Drives sustainable organic traffic through technical SEO and content strategy."
+division: marketing
+source: agency-agents
+repo_path: marketing/marketing-seo-specialist.md
+prompt_file: seo-specialist.prompt.md

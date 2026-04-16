@@ -1,0 +1,33 @@
+project:
+  name: VisiTimeContent
+  type: Content/Marketing
+  description: >
+    Контент-пайплайн для серии коротких видео о разработке VisiTime.
+    Планирование контента → редактирование → публикация в TikTok,
+    Instagram Reels, YouTube Shorts с оптимизированными хештегами и описаниями.
+  owner: Yurii Horoshenko
+  created: 2026-04-16
+
+stack:
+  - content-strategy
+  - social-media
+  - short-form-video
+
+platforms:
+  - tiktok
+  - instagram
+  - youtube-shorts
+
+base_project:
+  name: VisiTime
+  path: ../VisiTime
+  description: Платформа бронирования (KMM + .NET 10)
+
+content:
+  format: short-video (15-60s)
+  series: "Build in Public — VisiTime"
+  themes:
+    - dev-vlog
+    - behind-the-scenes
+    - feature-showcase
+    - tech-explainer
