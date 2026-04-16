@@ -8,3 +8,4 @@ division: marketing
 source: agency-agents
 repo_path: marketing/marketing-tiktok-strategist.md
 prompt_file: tiktok-strategist.prompt.md
+skills: [twitter-reader, ai-multimodal, create-promo-video, linear-task, agent-task-picker]

@@ -8,3 +8,4 @@ division: design
 source: agency-agents
 repo_path: design/design-visual-storyteller.md
 prompt_file: visual-storyteller.prompt.md
+skills: [aesthetic, image-enhancer, ai-multimodal, linear-task, agent-task-picker]

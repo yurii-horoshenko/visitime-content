@@ -7,8 +7,8 @@
 
 | Агенты | Модель |
 |--------|--------|
+| social-media-strategist, tiktok-strategist | `cloud-max` |
 | qa-engineer | `cloud-code` |
-| social-media-strategist, software-architect, tiktok-strategist | `cloud-max` |
 | content-creator, instagram-curator, narratologist, product-manager, seo-specialist, short-video-editing-coach, video-optimization-specialist, visual-storyteller | `cloud-smart` |
 
 ## Задачи
@@ -17,7 +17,7 @@ Team: `VisiTimeContent` | ID: `2b130448-21d2-4167-9313-06187182a62e` | Key: `VIS
 Статусы: `Backlog` → `Todo` → `In Progress` → `Done`
 
 ## Workflow
-PM (Linear задача) → Architect (Technical Details) → QA (Test Cases) → Dev (реализует → `In Progress`) → QA (`Done`)
+PM → social-media-strategist (стратегия) → narratologist (структура) → content-creator (брифы в docs/briefs/) → QA (ревью) → задачи в Linear → платформенный агент (`In Progress`) → QA (`Done`)
 
 ## Compact Instructions
 При компакте сохранять:

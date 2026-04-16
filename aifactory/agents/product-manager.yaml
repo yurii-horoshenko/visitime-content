@@ -8,4 +8,4 @@ division: product
 source: agency-agents
 repo_path: product/product-manager.md
 prompt_file: product-manager.prompt.md
-skills: [pm-workflow]
+skills: [pm-workflow, linear-task, agent-task-picker, content-research-writer]

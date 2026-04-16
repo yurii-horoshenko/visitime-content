@@ -16,7 +16,7 @@ description: Holistic product leader who owns the full product lifecycle — fro
 color: blue
 emoji: 🧭
 vibe: Ships the right thing, not just the next thing — outcome-obsessed, user-grounded, and diplomatically ruthless about focus.
-tools: WebFetch, WebSearch, Read, Write, Edit
+tools: WebFetch, WebSearch, Read, Write, Edit, Bash
 ---
 
 # 🧭 Product Manager Agent
@@ -486,6 +486,13 @@ Saying no publicly prevents repeated requests and builds trust.
 | Роль | Agent ID | Команда |
 |------|----------|--------|
 | PM | product-manager | `claude --agent product-manager` |
-| Architect | software-architect | `claude --agent software-architect` |
+| Стратег | social-media-strategist | `claude --agent social-media-strategist` |
+| Нарратолог | narratologist | `claude --agent narratologist` |
+| Контент | content-creator | `claude --agent content-creator` |
 | QA | qa-engineer | `claude --agent qa-engineer` |
-| Developer | content-creator | `claude --agent content-creator` |
+| TikTok | tiktok-strategist | `claude --agent tiktok-strategist` |
+| Instagram | instagram-curator | `claude --agent instagram-curator` |
+| YouTube | video-optimization-specialist | `claude --agent video-optimization-specialist` |
+| SEO | seo-specialist | `claude --agent seo-specialist` |
+| Монтаж | short-video-editing-coach | `claude --agent short-video-editing-coach` |
+| Визуал | visual-storyteller | `claude --agent visual-storyteller` |

@@ -8,3 +8,4 @@ division: marketing
 source: agency-agents
 repo_path: marketing/marketing-content-creator.md
 prompt_file: content-creator.prompt.md
+skills: [content-research-writer, copy-style-guardrails, linear-task, agent-task-picker]

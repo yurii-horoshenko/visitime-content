@@ -142,6 +142,6 @@ Use this agent when you need:
 | Роль | Agent ID | Команда |
 |------|----------|--------|
 | PM | product-manager | `claude --agent product-manager` |
-| Architect | software-architect | `claude --agent software-architect` |
+| Стратег | social-media-strategist | `claude --agent social-media-strategist` |
 | QA | qa-engineer | `claude --agent qa-engineer` |
 | Developer | content-creator | `claude --agent content-creator` |

@@ -8,3 +8,4 @@ division: marketing
 source: agency-agents
 repo_path: marketing/marketing-seo-specialist.md
 prompt_file: seo-specialist.prompt.md
+skills: [content-research-writer, linear-task, agent-task-picker]

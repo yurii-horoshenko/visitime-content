@@ -1,19 +1,75 @@
 {
   "product-manager": [
-    "pm-workflow"
-  ],
-  "software-architect": [
-    "api-design",
-    "architecture-analysis",
-    "code-review",
-    "debugging",
-    "refactoring"
+    "pm-workflow",
+    "linear-task",
+    "agent-task-picker",
+    "content-research-writer"
   ],
   "qa-engineer": [
-    "api-testing",
-    "code-review",
-    "debugging",
-    "refactoring",
-    "test-automation"
+    "api-testing-patterns",
+    "systematic-debugging",
+    "requesting-code-review",
+    "qa-verify",
+    "tdd-workflow",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "content-creator": [
+    "content-research-writer",
+    "copy-style-guardrails",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "tiktok-strategist": [
+    "twitter-reader",
+    "ai-multimodal",
+    "create-promo-video",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "instagram-curator": [
+    "image-enhancer",
+    "aesthetic",
+    "ai-multimodal",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "video-optimization-specialist": [
+    "ai-multimodal",
+    "media-processing",
+    "create-promo-video",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "short-video-editing-coach": [
+    "media-processing",
+    "ai-multimodal",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "social-media-strategist": [
+    "twitter-reader",
+    "content-research-writer",
+    "copy-style-guardrails",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "seo-specialist": [
+    "content-research-writer",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "visual-storyteller": [
+    "aesthetic",
+    "image-enhancer",
+    "ai-multimodal",
+    "linear-task",
+    "agent-task-picker"
+  ],
+  "narratologist": [
+    "content-research-writer",
+    "copy-style-guardrails",
+    "linear-task",
+    "agent-task-picker"
   ]
 }

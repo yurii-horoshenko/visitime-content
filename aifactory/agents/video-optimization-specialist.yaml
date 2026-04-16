@@ -8,3 +8,4 @@ division: marketing
 source: agency-agents
 repo_path: marketing/marketing-video-optimization-specialist.md
 prompt_file: video-optimization-specialist.prompt.md
+skills: [ai-multimodal, media-processing, create-promo-video, linear-task, agent-task-picker]

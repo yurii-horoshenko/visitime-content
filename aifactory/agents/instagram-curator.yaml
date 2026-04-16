@@ -8,3 +8,4 @@ division: marketing
 source: agency-agents
 repo_path: marketing/marketing-instagram-curator.md
 prompt_file: instagram-curator.prompt.md
+skills: [image-enhancer, aesthetic, ai-multimodal, linear-task, agent-task-picker]

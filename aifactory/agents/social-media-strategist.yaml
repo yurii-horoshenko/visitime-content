@@ -8,3 +8,4 @@ division: marketing
 source: agency-agents
 repo_path: marketing/marketing-social-media-strategist.md
 prompt_file: social-media-strategist.prompt.md
+skills: [twitter-reader, content-research-writer, copy-style-guardrails, linear-task, agent-task-picker]

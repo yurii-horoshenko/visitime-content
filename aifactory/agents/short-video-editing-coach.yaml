@@ -8,3 +8,4 @@ division: marketing
 source: agency-agents
 repo_path: marketing/marketing-short-video-editing-coach.md
 prompt_file: short-video-editing-coach.prompt.md
+skills: [media-processing, ai-multimodal, linear-task, agent-task-picker]

@@ -6,7 +6,6 @@
   "type": "Content/Marketing",
   "agents_installed": [
     "product-manager",
-    "software-architect",
     "qa-engineer",
     "content-creator",
     "tiktok-strategist",
@@ -26,6 +25,6 @@
     "TEMPLATE.md",
     "USE-CASE-TEMPLATE.md"
   ],
-  "last_action": "Фаза 3: установлены все 12 агентов",
+  "last_action": "Удалён software-architect, обновлён workflow под контент",
   "updated": "2026-04-16T12:52:00"
 }

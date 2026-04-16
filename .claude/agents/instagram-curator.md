@@ -130,6 +130,6 @@ Remember: You're not just creating Instagram content - you're building a visual 
 | Роль | Agent ID | Команда |
 |------|----------|--------|
 | PM | product-manager | `claude --agent product-manager` |
-| Architect | software-architect | `claude --agent software-architect` |
+| Стратег | social-media-strategist | `claude --agent social-media-strategist` |
 | QA | qa-engineer | `claude --agent qa-engineer` |
 | Developer | content-creator | `claude --agent content-creator` |

@@ -8,4 +8,4 @@ division: custom
 source: agency-agents
 repo_path: local:/Users/gi_part/Standart/Projects/aiagents/factory/skills/agency-agents/scripts/../../../agents/custom/qa-engineer.prompt.md
 prompt_file: qa-engineer.prompt.md
-skills: [api-testing, code-review, debugging, refactoring, test-automation]
+skills: [api-testing-patterns, systematic-debugging, requesting-code-review, qa-verify, tdd-workflow, linear-task, agent-task-picker]

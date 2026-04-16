@@ -8,3 +8,4 @@ division: academic
 source: agency-agents
 repo_path: academic/academic-narratologist.md
 prompt_file: narratologist.prompt.md
+skills: [content-research-writer, copy-style-guardrails, linear-task, agent-task-picker]
