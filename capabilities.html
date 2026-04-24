@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capabilities — VisiTime Content System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F5F7FA;
+      --card:      #FFFFFF;
+      --border:    #E2E8F0;
+      --muted:     #94A3B8;
+      --text:      #1A202C;
+      --text-dim:  #64748B;
+      --text-sm:   #475569;
+      --radius:    10px;
+      --radius-sm: 6px;
+      --accent:    #FF6A1F;
+    }
+
+    html { font-size: 14px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 24px 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .page-header { margin-bottom: 32px; }
+    .page-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      line-height: 1.1;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-sm);
+      margin-top: 10px;
+      max-width: 760px;
+      line-height: 1.6;
+    }
+    .page-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    /* ── CATEGORY SECTIONS ───────────────────────────────────── */
+    .category {
+      margin-bottom: 40px;
+    }
+    .category-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .category-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: var(--cat-bg, #FFF8F0);
+      border: 1px solid var(--cat-border, #FED7AA);
+    }
+    .category-title-block { flex: 1; }
+    .category-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .category-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .category-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 4px 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    /* ── FEATURE CARDS ───────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+    @media (min-width: 1200px) {
+      .features-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    .feature {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .feature::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      background: var(--accent-color, var(--accent));
+    }
+
+    .feature-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-color, var(--accent));
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+    .feature-title {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .feature-desc {
+      font-size: 12px;
+      color: var(--text-sm);
+      line-height: 1.55;
+    }
+    .feature-meta {
+      border-top: 1px dashed var(--border);
+      padding-top: 10px;
+      margin-top: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11px;
+    }
+    .meta-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 8px;
+    }
+    .meta-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      padding-top: 2px;
+    }
+    .meta-value {
+      font-size: 11px;
+      color: var(--text-sm);
+      line-height: 1.45;
+    }
+    .agent-chip {
+      display: inline-block;
+      padding: 1px 7px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 3px;
+      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      color: #166534;
+      margin: 1px 2px 1px 0;
+      white-space: nowrap;
+    }
+    .status-pill {
+      display: inline-flex;
+      padding: 1px 7px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-ready { background: #DCFCE7; color: #166534; }
+    .status-planned { background: #FEF3C7; color: #92400E; }
+
+    .doc-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #1E40AF;
+      background: #EFF6FF;
+      padding: 2px 6px;
+      border-radius: 3px;
+      word-break: break-all;
+    }
+
+    /* ── TOP STATS ───────────────────────────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+    .stat-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    /* ── DOCS MAP ─────────────────────────────────────────────── */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .doc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 11px;
+    }
+    .doc-card b {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+    .doc-card-path {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: #1E40AF;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="page-tag">visitime · content system capabilities</div>
+  <h1 class="page-title">Что умеет наша система — обзор возможностей</h1>
+  <p class="page-subtitle">Полный стек AI-агентов и автоматизации для создания, публикации и управления контентом VisiTime. От анализа метрик до ответов на комментарии — одна система закрывает весь жизненный цикл контента.</p>
+  <p class="page-meta">Обновлено 24.04.2026 · <b style="color:#FF6A1F;">6 категорий</b> · <b style="color:#FF6A1F;">24 фичи</b> · <b style="color:#FF6A1F;">14 агентов</b></p>
+</header>
+
+<!-- TOP STATS -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-num">9</div>
+    <div class="stat-label">Фаз Pipeline</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">14</div>
+    <div class="stat-label">AI-Агентов</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">6</div>
+    <div class="stat-label">Платформ публикации</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Языка (RU + EN)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">~5ч</div>
+    <div class="stat-label">Твоего времени в неделю</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ 1 PLANNING & ANALYTICS -->
+<section class="category">
+  <div class="category-head">
+    <div class="category-icon" style="--cat-bg:#EDE9FE; --cat-border:#DDD6FE;">📊</div>
+    <div class="category-title-block">
+      <div class="category-title">1. Планирование и аналитика</div>
+      <div class="category-sub">Замкнутый feedback loop — метрики прошлой недели определяют план следующей</div>
+    </div>
+    <div class="category-count">4 фичи</div>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature" style="--accent-color:#8B5CF6;">
+      <div class="feature-num">01 · CAPABILITY</div>
+      <div class="feature-title">Еженедельный analytics report</div>
+      <div class="feature-desc">Автоматический сбор метрик по всем каналам через API, ранжирование постов (🔥 hit / ✅ solid / 😐 avg / ❌ flop), 3 рекомендации на следующую неделю.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">analytics-specialist</span> <span class="agent-chip">seo-specialist</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/analytics/metrics-feedback-loop.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#8B5CF6;">
+      <div class="feature-num">02 · CAPABILITY</div>
+      <div class="feature-title">Мониторинг конкурентов и трендов</div>
+      <div class="feature-desc">Еженедельный дайджест: что делают Booksy и Versum, какие beauty-тренды залетают в TikTok/Instagram, какие идеи можно взять у других стартапов.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">trend-watcher</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/ops/trend-watching.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#8B5CF6;">
+      <div class="feature-num">03 · CAPABILITY</div>
+      <div class="feature-title">Декомпозиция плана в задачи</div>
+      <div class="feature-desc">Готовый план недели из docs/calendar/ превращается в задачи VIS-XXX в Linear с приоритетами, дедлайнами, связанными агентами.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">product-manager</span> <span class="agent-chip">linear-task</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#8B5CF6;">
+      <div class="feature-num">04 · CAPABILITY</div>
+      <div class="feature-title">Стратегия и адаптация хуков</div>
+      <div class="feature-desc">Темы плана адаптируются под специфику каждой платформы — LinkedIn-хук не равен TikTok-хуку. Trending sounds для TikTok, ключевые слова RU/EN для SEO.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">social-media-strategist</span> <span class="agent-chip">tiktok-strategist</span> <span class="agent-chip">seo-specialist</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 2 CONTENT CREATION -->
+<section class="category">
+  <div class="category-head">
+    <div class="category-icon" style="--cat-bg:#FFF8F0; --cat-border:#FED7AA;">✍️</div>
+    <div class="category-title-block">
+      <div class="category-title">2. Создание контента</div>
+      <div class="category-sub">Тексты, карусели, видео-сценарии, макеты — всё на RU и EN с единым голосом бренда</div>
+    </div>
+    <div class="category-count">6 фич</div>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature" style="--accent-color:#FF6A1F;">
+      <div class="feature-num">05 · CAPABILITY</div>
+      <div class="feature-title">Текстовые посты RU + EN</div>
+      <div class="feature-desc">LinkedIn long-form, Twitter threads, Facebook-посты, technical articles. Пишутся с нуля под каждую платформу (не переводятся машинно).</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">content-creator</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#FF6A1F;">
+      <div class="feature-num">06 · CAPABILITY</div>
+      <div class="feature-title">Instagram-карусели</div>
+      <div class="feature-desc">Структура из 5–10 слайдов + макеты в Figma в брендовых цветах (оранжевый #FF6A1F + пастельные). Финальные PNG/JPG готовы к загрузке.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">instagram-curator</span> <span class="agent-chip">visual-storyteller</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#FF6A1F;">
+      <div class="feature-num">07 · CAPABILITY</div>
+      <div class="feature-title">Видео-сценарии и shotlist</div>
+      <div class="feature-desc">5-актовая нарративная структура (narratologist) → финальный сценарий с диалогами → детальный shotlist для съёмки с раскадровкой.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">narratologist</span> <span class="agent-chip">content-creator</span> <span class="agent-chip">short-video-editing-coach</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#FF6A1F;">
+      <div class="feature-num">08 · CAPABILITY</div>
+      <div class="feature-title">Инфографика и статика</div>
+      <div class="feature-desc">Графики данных (no-show расчёты, метрики), обложки постов, thumbnails для YouTube. В едином бренд-стиле.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">visual-storyteller</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#FF6A1F;">
+      <div class="feature-num">09 · CAPABILITY</div>
+      <div class="feature-title">Evergreen content bank</div>
+      <div class="feature-desc">Банк из 18+ готовых «вечнозелёных» постов в запасе. Используем когда аврал, отпуск или нет идей. Пополняется раз в 2 недели.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">content-creator</span> <span class="agent-chip">instagram-curator</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-planned">В процессе</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/strategy/evergreen-bank.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#FF6A1F;">
+      <div class="feature-num">10 · CAPABILITY</div>
+      <div class="feature-title">Единый голос бренда (Voice Guide)</div>
+      <div class="feature-desc">Все агенты пишут с одним характером бренда: честный, тёплый, без корпоративной шелухи и стоп-слов. Отдельные правила для RU и EN.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value">Используется всеми creation-агентами</span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/brand/voice-guide.md</span></span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 3 VIDEO PRODUCTION -->
+<section class="category">
+  <div class="category-head">
+    <div class="category-icon" style="--cat-bg:#FEF2F2; --cat-border:#FECACA;">🎬</div>
+    <div class="category-title-block">
+      <div class="category-title">3. Видео-продакшн</div>
+      <div class="category-sub">От shotlist до готовых форматов 9:16 / 1:1 / 16:9 с субтитрами</div>
+    </div>
+    <div class="category-count">4 фичи</div>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature" style="--accent-color:#B91C1C;">
+      <div class="feature-num">11 · CAPABILITY</div>
+      <div class="feature-title">Скринкасты без съёмки лица</div>
+      <div class="feature-desc">Запись экрана телефона с voice-over (QuickTime / iOS). 80% product-education видео делаются так — не нужна камера, свет, оператор.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">video-optimization-specialist</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#B91C1C;">
+      <div class="feature-num">12 · CAPABILITY</div>
+      <div class="feature-title">Монтаж с адаптацией под форматы</div>
+      <div class="feature-desc">Из одного исходника — 9:16 (TikTok/IG Reels), 1:1 (Facebook), 16:9 (YouTube), и thumbnails. Бренд-элементы, burned-in субтитры RU/EN.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">video-optimization-specialist</span> <span class="agent-chip">short-video-editing-coach</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#B91C1C;">
+      <div class="feature-num">13 · CAPABILITY</div>
+      <div class="feature-title">Batch-съёмка за 1 день</div>
+      <div class="feature-desc">План 1 съёмочного дня покрывает 4–6 видео на 2 недели. Shotlist, требования к свету, реквизит, дресс-код заранее подготовлены.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">short-video-editing-coach</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/calendar/02-shooting-plan.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#B91C1C;">
+      <div class="feature-num">14 · CAPABILITY</div>
+      <div class="feature-title">A/B обложки и CTR оптимизация</div>
+      <div class="feature-desc">Под каждое видео — 2–3 варианта thumbnail, тестируем через 48 часов после публикации, оставляем winner. Увеличивает CTR в 1.5–2×.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">video-optimization-specialist</span> <span class="agent-chip">visual-storyteller</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 4 PUBLISHING & AUTOMATION -->
+<section class="category">
+  <div class="category-head">
+    <div class="category-icon" style="--cat-bg:#EFF6FF; --cat-border:#BFDBFE;">🚀</div>
+    <div class="category-title-block">
+      <div class="category-title">4. Публикация и автоматизация</div>
+      <div class="category-sub">API-постинг в 6 соцсетей + auto-triggers для hit-постов</div>
+    </div>
+    <div class="category-count">4 фичи</div>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature" style="--accent-color:#3B82F6;">
+      <div class="feature-num">15 · CAPABILITY</div>
+      <div class="feature-title">Автопостинг через API</div>
+      <div class="feature-desc">Публикация в LinkedIn, Facebook, Instagram, YouTube, Twitter напрямую через API. TikTok через Metricool до аппрува. Никаких ручных действий.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Инструменты</span><span class="meta-value"><span class="agent-chip">n8n / Make.com</span> <span class="agent-chip">Meta Graph API</span> <span class="agent-chip">YouTube Data API</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-planned">Setup нужен</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#3B82F6;">
+      <div class="feature-num">16 · CAPABILITY</div>
+      <div class="feature-title">Content repurposing автомат</div>
+      <div class="feature-desc">Пост получил ER ≥ 2× avg → автоматически готовятся 4 других формата: Twitter thread → IG carousel → TikTok → LinkedIn. x3 охват без новых идей.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">content-creator</span> <span class="agent-chip">analytics-specialist</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/strategy/content-repurposing.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#3B82F6;">
+      <div class="feature-num">17 · CAPABILITY</div>
+      <div class="feature-title">Blackout dates и crisis pause</div>
+      <div class="feature-desc">Перед публикацией автопроверка — если сегодня траур, кризис, чувствительная дата, пост переносится. Ручной kill switch «EMERGENCY PAUSE».</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value">Orchestrator + escalation to you</span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/ops/blackout-dates.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#3B82F6;">
+      <div class="feature-num">18 · CAPABILITY</div>
+      <div class="feature-title">QA перед публикацией</div>
+      <div class="feature-desc">Проверка по Acceptance Criteria — хук в первых 3 сек, CTA, бренд-элементы, орфография, brand voice, model releases на всех в кадре.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">qa-engineer</span> <span class="agent-chip">qa-verify</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 5 COMMUNITY & ENGAGEMENT -->
+<section class="category">
+  <div class="category-head">
+    <div class="category-icon" style="--cat-bg:#FCE7F3; --cat-border:#FBCFE8;">💬</div>
+    <div class="category-title-block">
+      <div class="category-title">5. Community management</div>
+      <div class="category-sub">Ответы на комменты и DM пока горячо — конверсия лидов начинается здесь</div>
+    </div>
+    <div class="category-count">3 фичи</div>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature" style="--accent-color:#EC4899;">
+      <div class="feature-num">19 · CAPABILITY</div>
+      <div class="feature-title">Ответы 15+15 мин в день</div>
+      <div class="feature-desc">Утренний и вечерний чек всех каналов (IG DM, TikTok, LinkedIn, FB, Twitter). Ответы по saved replies, эскалация сложных тебе.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">community-manager</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/ops/community-management.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#EC4899;">
+      <div class="feature-num">20 · CAPABILITY</div>
+      <div class="feature-title">Сбор лидов в Linear</div>
+      <div class="feature-desc">B2B лид на LinkedIn → VIS-LEAD-XXX задача. B2C интерес в DM → VIS-USER-XXX. Легко отслеживать и добивать.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">community-manager</span> <span class="agent-chip">product-manager</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#EC4899;">
+      <div class="feature-num">21 · CAPABILITY</div>
+      <div class="feature-title">Crisis response playbook</div>
+      <div class="feature-desc">4 типа кризисов (внешний траур / баг / хейт / legal) с протоколом действий. Kill switch «EMERGENCY PAUSE» для экстренной остановки всего.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value">Escalation к тебе</span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/ops/crisis-playbook.md</span></span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 6 MONETIZATION & LEGAL -->
+<section class="category">
+  <div class="category-head">
+    <div class="category-icon" style="--cat-bg:#F0FDF4; --cat-border:#BBF7D0;">💰</div>
+    <div class="category-title-block">
+      <div class="category-title">6. Монетизация и legal</div>
+      <div class="category-sub">Превращение органики в paid и защита от юридических проблем</div>
+    </div>
+    <div class="category-count">3 фичи</div>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature" style="--accent-color:#10B981;">
+      <div class="feature-num">22 · CAPABILITY</div>
+      <div class="feature-title">Organic → Paid boost trigger</div>
+      <div class="feature-desc">Органический пост с ER ≥ 2× avg → кандидат на Meta/TikTok Ads boost €50–200. Single-click approval. Winner уже валидирован, не тестируем в Ads вслепую.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">analytics-specialist</span> <span class="agent-chip">social-media-strategist</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/strategy/organic-to-paid-trigger.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#10B981;">
+      <div class="feature-num">23 · CAPABILITY</div>
+      <div class="feature-title">Model releases (юридические согласия)</div>
+      <div class="feature-desc">Шаблон согласия на использование изображения RU + EN. Каждый человек в кадре подписывает перед съёмкой. Скан в docs/legal/releases/.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">qa-engineer</span> проверяет перед публикацией</span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/templates/model-release-{ru,en}.md</span></span></div>
+      </div>
+    </div>
+
+    <div class="feature" style="--accent-color:#10B981;">
+      <div class="feature-num">24 · CAPABILITY</div>
+      <div class="feature-title">Translation QA (анти-«переводизм»)</div>
+      <div class="feature-desc">Не переводим машинно — переписываем с нуля под нативную аудиторию. Проверка на русско- и англоязычные кальки перед публикацией.</div>
+      <div class="feature-meta">
+        <div class="meta-row"><span class="meta-label">Агенты</span><span class="meta-value"><span class="agent-chip">content-creator</span> <span class="agent-chip">qa-engineer</span></span></div>
+        <div class="meta-row"><span class="meta-label">Статус</span><span class="meta-value"><span class="status-pill status-ready">Ready</span></span></div>
+        <div class="meta-row"><span class="meta-label">Документ</span><span class="meta-value"><span class="doc-link">docs/ops/translation-qa.md</span></span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ DOCS MAP -->
+<section class="category" style="margin-top:48px;">
+  <div class="category-head">
+    <div class="category-icon" style="--cat-bg:#F1F5F9; --cat-border:#CBD5E1;">📚</div>
+    <div class="category-title-block">
+      <div class="category-title">Документация — где что лежит</div>
+      <div class="category-sub">Вся система описана в markdown-файлах. Открывай по нужде.</div>
+    </div>
+  </div>
+
+  <div class="docs-grid">
+    <div class="doc-card"><b>Стратегия</b>Цели, KPI, аудитории, языки, пропорции<span class="doc-card-path">docs/strategy/01-content-strategy.md</span></div>
+    <div class="doc-card"><b>Рубрики</b>6 рубрик × 40+ тем: Стройка · AI · Фичи · Use Cases · Категории · Закулисье<span class="doc-card-path">docs/pillars/content-pillars.md</span></div>
+    <div class="doc-card"><b>План 8 недель</b>4 фазы: warmup → validation → momentum → pre-launch<span class="doc-card-path">docs/calendar/00-overview-8-weeks.md</span></div>
+    <div class="doc-card"><b>План недель 1-2</b>14 постов по дням, платформам, форматам<span class="doc-card-path">docs/calendar/01-week-01-02.md</span></div>
+    <div class="doc-card"><b>План съёмок</b>Shotlist, реквизит, свет, бюджет<span class="doc-card-path">docs/calendar/02-shooting-plan.md</span></div>
+    <div class="doc-card"><b>Brand Voice</b>Единый голос для всех агентов — тон, стоп-слова<span class="doc-card-path">docs/brand/voice-guide.md</span></div>
+    <div class="doc-card"><b>Repurposing</b>Hit-пост → 4 новых формата<span class="doc-card-path">docs/strategy/content-repurposing.md</span></div>
+    <div class="doc-card"><b>Organic → Paid</b>Триггер boost для winner-постов<span class="doc-card-path">docs/strategy/organic-to-paid-trigger.md</span></div>
+    <div class="doc-card"><b>Evergreen Bank</b>Запас 18+ готовых вечнозелёных постов<span class="doc-card-path">docs/strategy/evergreen-bank.md</span></div>
+    <div class="doc-card"><b>Metrics Loop</b>Weekly report + 3 рекомендации<span class="doc-card-path">docs/analytics/metrics-feedback-loop.md</span></div>
+    <div class="doc-card"><b>Community</b>Ответы на комменты/DM<span class="doc-card-path">docs/ops/community-management.md</span></div>
+    <div class="doc-card"><b>Crisis Playbook</b>4 типа кризисов + kill switch<span class="doc-card-path">docs/ops/crisis-playbook.md</span></div>
+    <div class="doc-card"><b>Blackout Dates</b>Когда не публикуем<span class="doc-card-path">docs/ops/blackout-dates.md</span></div>
+    <div class="doc-card"><b>Trend Watching</b>Мониторинг конкурентов и трендов<span class="doc-card-path">docs/ops/trend-watching.md</span></div>
+    <div class="doc-card"><b>Translation QA</b>Без «переводизмов» RU↔EN<span class="doc-card-path">docs/ops/translation-qa.md</span></div>
+    <div class="doc-card"><b>Model Release</b>Юридические согласия актёров RU+EN<span class="doc-card-path">docs/templates/model-release-*.md</span></div>
+  </div>
+</section>
+
+</body>
+</html>

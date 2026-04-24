@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Workflow — VisiTime</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F5F7FA;
+      --card:      #FFFFFF;
+      --border:    #E2E8F0;
+      --muted:     #94A3B8;
+      --text:      #1A202C;
+      --text-dim:  #64748B;
+      --text-sm:   #475569;
+      --radius:    10px;
+      --radius-sm: 6px;
+      --accent:    #FF6A1F;
+    }
+
+    html { font-size: 14px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 24px 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .page-header { margin-bottom: 32px; }
+    .page-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      line-height: 1.1;
+    }
+    .page-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .section { margin-bottom: 40px; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+    }
+    .section-head h3 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+    }
+    .section-head .line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── LEGEND ─────────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 14px 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 28px;
+      font-size: 12px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 3px;
+    }
+    .dot-user { background: #FEF3C7; border: 2px solid #F59E0B; }
+    .dot-agent { background: #DCFCE7; border: 2px solid #10B981; }
+    .dot-auto { background: #DBEAFE; border: 2px solid #3B82F6; }
+    .dot-review { background: #FCE7F3; border: 2px solid #EC4899; }
+
+    /* ── PHASE CARDS ─────────────────────────────────────────── */
+    .phases {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .phase {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--phase-color, var(--accent));
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      display: grid;
+      grid-template-columns: 80px 1fr 320px;
+      gap: 20px;
+      align-items: start;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    @media (max-width: 900px) {
+      .phase { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    .phase-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--phase-color, var(--accent));
+      line-height: 1;
+      opacity: 0.4;
+    }
+    .phase-body { min-width: 0; }
+    .phase-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .phase-subtitle {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+    .phase-actor {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .actor-user { background: #FEF3C7; color: #92400E; }
+    .actor-agent { background: #DCFCE7; color: #166534; }
+    .actor-auto { background: #DBEAFE; color: #1E40AF; }
+    .actor-review { background: #FCE7F3; color: #9D174D; }
+
+    .phase-content {
+      font-size: 12px;
+      color: var(--text-sm);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .phase-content b { color: var(--text); }
+
+    .phase-io {
+      background: #F8FAFC;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 11px;
+      color: var(--text-dim);
+      font-family: 'Space Mono', monospace;
+    }
+    .phase-io b { color: var(--text); font-family: 'Inter', sans-serif; font-weight: 600; }
+
+    .phase-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sidebar-block {
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .sidebar-agents {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+    }
+    .sidebar-command {
+      background: #1E293B;
+      color: #E2E8F0;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+    }
+    .sidebar-you {
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+    }
+    .sidebar-block b {
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+    .sidebar-command b { color: #94A3B8; }
+
+    .agent-chip {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #fff;
+      border: 1px solid #BBF7D0;
+      border-radius: 4px;
+      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      color: #166534;
+      margin: 2px 3px 2px 0;
+    }
+
+    /* ── EXAMPLE BOX ─────────────────────────────────────────── */
+    .example {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      border: 1px solid #F59E0B;
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-bottom: 28px;
+    }
+    .example-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #92400E;
+      margin-bottom: 10px;
+    }
+    .example-body {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #78350F;
+    }
+    .example-body code {
+      background: rgba(255,255,255,0.7);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: #92400E;
+    }
+
+    /* ── TIMELINE ────────────────────────────────────────────── */
+    .timeline {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .timeline table { width: 100%; border-collapse: collapse; }
+    .timeline th {
+      background: #F8FAFC;
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline td {
+      padding: 10px 16px;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-sm);
+    }
+    .timeline tr:last-child td { border-bottom: none; }
+    .timeline td:first-child {
+      font-weight: 600;
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    /* ── CTA BLOCK ───────────────────────────────────────────── */
+    .cta-block {
+      background: #1E293B;
+      color: #E2E8F0;
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-top: 32px;
+    }
+    .cta-block h4 {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .cta-block p {
+      font-size: 13px;
+      color: #CBD5E1;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .cta-block code {
+      background: #0F172A;
+      color: #FDE68A;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+    }
+    .cta-prompts {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .cta-prompt {
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: #FDE68A;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="page-tag">visitime · content production workflow</div>
+  <h1 class="page-title">Workflow — как создаём и публикуем контент</h1>
+  <p class="page-meta">Обновлено 24.04.2026 · <b style="color:#FF6A1F;">9 фаз</b> · замкнутый цикл от анализа до engagement · pipeline с AI-агентами</p>
+</header>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot dot-user"></span><b>Я запускаю / решаю</b></div>
+  <div class="legend-item"><span class="legend-dot dot-agent"></span><b>Агент делает сам</b></div>
+  <div class="legend-item"><span class="legend-dot dot-review"></span><b>Мой review / апрув</b></div>
+  <div class="legend-item"><span class="legend-dot dot-auto"></span><b>Автоматика (API / cron)</b></div>
+</div>
+
+<!-- EXAMPLE -->
+<div class="example">
+  <div class="example-title">💡 Как это работает на практике</div>
+  <div class="example-body">
+    Ты в Claude Code пишешь: <code>подготовь контент на неделю 3</code>. Перед этим (Фаза 00) я уже собрал метрики прошлой недели и обновил план. Далее <code>product-manager</code> → задачи в Linear → агенты пишут тексты, делают карусели и сценарии с опорой на <b>brand voice guide</b>. Ты подключаешься в фазах <b>04</b> (съёмка / апрув текстов) и <b>06</b> (final review). После публикации — Фаза 08 <b>community management</b> 15+15 мин/день на ответы. Hit-посты автоматически репурпосятся и триггерят paid boost.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ WORKFLOW -->
+<section class="section">
+  <div class="section-head"><h3>Pipeline — 9 фаз (замкнутый цикл)</h3><div class="line"></div></div>
+
+  <div class="phases">
+
+    <!-- PHASE 0 — NEW -->
+    <div class="phase" style="--phase-color:#8B5CF6;">
+      <div class="phase-num">00</div>
+      <div class="phase-body">
+        <div class="phase-title">📊 Анализ прошлой недели <span style="font-size:10px;background:#EDE9FE;color:#6D28D9;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-left:8px;">NEW</span></div>
+        <div class="phase-subtitle">Feedback loop — метрики прошлой недели определяют план следующей</div>
+        <div class="phase-actor actor-agent">Агент делает сам</div>
+        <div class="phase-content">
+          Каждый понедельник в 08:00 <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">analytics-specialist</code> пулит метрики по всем каналам, ранжирует посты (🔥 hit / ✅ solid / 😐 avg / ❌ flop), даёт 3 рекомендации на следующую неделю. Hit-посты автоматически идут в <b>Repurposing</b> и триггерят <b>Paid boost</b> уведомление.
+        </div>
+        <div class="phase-io"><b>Вход:</b> metrics API &nbsp;→&nbsp; <b>Выход:</b> weekly report + 3 adjustment для <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">product-manager</code></div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты</b>
+          <span class="agent-chip">analytics-specialist</span>
+          <span class="agent-chip">seo-specialist</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          Ничего — отчёт сам появится в <span style="font-family:'Space Mono',monospace;font-size:10px;">docs/calendar/weekly-reports/</span>. Читаешь 5 мин в понедельник.
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="phase" style="--phase-color:#F59E0B;">
+      <div class="phase-num">01</div>
+      <div class="phase-body">
+        <div class="phase-title">📋 Планирование недели</div>
+        <div class="phase-subtitle">Решаем что именно публикуем на конкретную неделю</div>
+        <div class="phase-actor actor-user">Я запускаю</div>
+        <div class="phase-content">
+          Говоришь: «<b>подготовь контент на неделю N</b>» или «<b>запускаем план недели 3</b>». Я открываю <span style="font-family:'Space Mono',monospace;font-size:11px;background:#F1F5F9;padding:2px 5px;border-radius:3px;">docs/calendar/NN-week-XX.md</span>, подтверждаю темы и передаю <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">product-manager</code> для декомпозиции.
+        </div>
+        <div class="phase-io"><b>Вход:</b> календарь недели &nbsp;→&nbsp; <b>Выход:</b> 7 задач VIS-XXX в Linear со статусом Todo</div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты</b>
+          <span class="agent-chip">product-manager</span>
+          <span class="agent-chip">linear-task</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          Команда «подготовь контент на неделю N». Всё.
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase" style="--phase-color:#10B981;">
+      <div class="phase-num">02</div>
+      <div class="phase-body">
+        <div class="phase-title">🎯 Стратегия и хуки</div>
+        <div class="phase-subtitle">Уточняем под платформы, находим крючки, ключевые слова</div>
+        <div class="phase-actor actor-agent">Агент делает сам</div>
+        <div class="phase-content">
+          <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">social-media-strategist</code> адаптирует темы под специфику каждой платформы. <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">tiktok-strategist</code> подбирает trending sounds и первые 3 секунды для скетчей. <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">seo-specialist</code> — хэштеги RU и EN.
+        </div>
+        <div class="phase-io"><b>Вход:</b> темы из плана &nbsp;→&nbsp; <b>Выход:</b> уточнённые хуки + хэштеги + trending сценарии в задачах Linear</div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты</b>
+          <span class="agent-chip">social-media-strategist</span>
+          <span class="agent-chip">tiktok-strategist</span>
+          <span class="agent-chip">seo-specialist</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          Ничего — фоновая фаза.
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase" style="--phase-color:#10B981;">
+      <div class="phase-num">03</div>
+      <div class="phase-body">
+        <div class="phase-title">✍️ Генерация контента</div>
+        <div class="phase-subtitle">Пишем тексты, сценарии, делаем макеты каруселей</div>
+        <div class="phase-actor actor-agent">Агент делает сам</div>
+        <div class="phase-content">
+          Разделение по типу контента:<br>
+          · <b>Текстовые посты</b> (LinkedIn, Twitter, Facebook) — <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">content-creator</code> пишет финальные тексты на EN/RU<br>
+          · <b>Карусели и инфографика</b> — <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">instagram-curator</code> структура + <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">visual-storyteller</code> макет в Figma<br>
+          · <b>Видео-сценарии</b> — <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">narratologist</code> 5-актовая структура → <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">content-creator</code> сценарий → <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">short-video-editing-coach</code> shotlist
+        </div>
+        <div class="phase-io"><b>Вход:</b> уточнённые темы &nbsp;→&nbsp; <b>Выход:</b> файлы в <span style="font-family:'Space Mono',monospace;font-size:10px;">content/posts/</span> · <span style="font-family:'Space Mono',monospace;font-size:10px;">content/graphics/</span> · <span style="font-family:'Space Mono',monospace;font-size:10px;">content/videos/scripts/</span></div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты (по типу)</b>
+          <span class="agent-chip">content-creator</span>
+          <span class="agent-chip">narratologist</span>
+          <span class="agent-chip">instagram-curator</span>
+          <span class="agent-chip">visual-storyteller</span>
+          <span class="agent-chip">short-video-editing-coach</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          Ничего — агенты пишут сами. В конце фазы увидишь готовые файлы.
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase" style="--phase-color:#F59E0B;">
+      <div class="phase-num">04</div>
+      <div class="phase-body">
+        <div class="phase-title">🎬 Твоё участие — съёмка и апрув</div>
+        <div class="phase-subtitle">Единственная фаза где ты активно работаешь руками</div>
+        <div class="phase-actor actor-user">Я делаю сам</div>
+        <div class="phase-content">
+          Что от тебя требуется:<br>
+          · <b>Прочитать тексты</b> постов 1–4 недели, где EN/RU тексты готовы — поправить если звучит «не по-твоему»<br>
+          · <b>Снять видео</b> — по shotlist'у (обычно 1 съёмочный день в неделю). Скринкасты делаешь сам с телефона, без оператора<br>
+          · <b>Одобрить макеты</b> каруселей в Figma одним «ок»
+        </div>
+        <div class="phase-io"><b>Вход:</b> тексты, сценарии, shotlist &nbsp;→&nbsp; <b>Выход:</b> raw footage в <span style="font-family:'Space Mono',monospace;font-size:10px;">production/raw-footage/</span> + одобренные тексты</div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты в помощь</b>
+          <span class="agent-chip">video-optimization-specialist</span>
+          <span class="agent-chip">visual-storyteller</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          ~2–4 часа в неделю: чтение текстов, съёмочный день (4–5ч раз в 1–2 недели), апрув каруселей.
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 5 -->
+    <div class="phase" style="--phase-color:#10B981;">
+      <div class="phase-num">05</div>
+      <div class="phase-body">
+        <div class="phase-title">🎞️ Пост-продакшн видео</div>
+        <div class="phase-subtitle">Монтаж, субтитры, адаптация под форматы 9:16, 1:1, 16:9</div>
+        <div class="phase-actor actor-agent">Агент делает сам</div>
+        <div class="phase-content">
+          <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">video-optimization-specialist</code> берёт raw footage → делает монтаж (или даёт тебе precise cut-list для CapCut), добавляет burned-in субтитры RU/EN, делает обложки, ресайз под форматы платформ, выгружает в <span style="font-family:'Space Mono',monospace;font-size:11px;">production/edited/</span>.
+        </div>
+        <div class="phase-io"><b>Вход:</b> raw footage &nbsp;→&nbsp; <b>Выход:</b> финальные видео 9:16 (TikTok/IG) · 1:1 (FB) · 16:9 (YouTube) + thumbnails</div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты</b>
+          <span class="agent-chip">video-optimization-specialist</span>
+          <span class="agent-chip">short-video-editing-coach</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          Ничего, если монтаж делает агент. Если руками в CapCut — следуешь cut-list (~30–45 мин на видео).
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 6 -->
+    <div class="phase" style="--phase-color:#EC4899;">
+      <div class="phase-num">06</div>
+      <div class="phase-body">
+        <div class="phase-title">✅ QA Review — финальная проверка</div>
+        <div class="phase-subtitle">Чек-лист перед публикацией: смысл, орфография, бренд, CTA</div>
+        <div class="phase-actor actor-review">Мой апрув</div>
+        <div class="phase-content">
+          <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">qa-engineer</code> проверяет по Acceptance Criteria: правильный хук в первых 3 сек, корректные хэштеги, рабочая ссылка в bio, субтитры читабельны, нет опечаток, соответствие бренду. Даёт отчёт «ready / нужны правки». <b>Ты утверждаешь одним сообщением</b> — и пост уходит в очередь.
+        </div>
+        <div class="phase-io"><b>Вход:</b> финальные материалы &nbsp;→&nbsp; <b>Выход:</b> статус задачи Linear → <span style="color:#10B981;font-weight:600;">Ready to publish</span></div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты</b>
+          <span class="agent-chip">qa-engineer</span>
+          <span class="agent-chip">qa-verify</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          Последний взгляд на готовый пост. Одна минута на пост.
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 7 -->
+    <div class="phase" style="--phase-color:#3B82F6;">
+      <div class="phase-num">07</div>
+      <div class="phase-body">
+        <div class="phase-title">🚀 Публикация по расписанию + auto-triggers</div>
+        <div class="phase-subtitle">Автоматический постинг через API платформ в нужное время</div>
+        <div class="phase-actor actor-auto">Автоматика (API / cron)</div>
+        <div class="phase-content">
+          Оркестратор (<b>n8n</b> или <b>cron + скрипт</b>) берёт одобренный пост и публикует через API. <b>Перед публикацией</b> проверка blackout-dates — если сегодня траур / кризис, пост автоматически переносится. <b>Через 48 часов</b> срабатывают auto-triggers: hit-пост (ER ≥ 2× avg) → notification «buster?» + repurposing candidates.
+        </div>
+        <div class="phase-io"><b>Вход:</b> одобренный пост &nbsp;→&nbsp; <b>Выход:</b> публикация + ссылка в Linear + 48h auto-check на repurpose/boost</div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Инструменты</b>
+          <span class="agent-chip">n8n / Make.com</span>
+          <span class="agent-chip">Meta Graph API</span>
+          <span class="agent-chip">YouTube API</span>
+          <span class="agent-chip">LinkedIn API</span>
+          <span class="agent-chip">Metricool (TikTok)</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          Ничего. Единственное — один клик «yes, boost» если пост взлетел.
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 8 — NEW -->
+    <div class="phase" style="--phase-color:#EC4899;">
+      <div class="phase-num">08</div>
+      <div class="phase-body">
+        <div class="phase-title">💬 Community engagement <span style="font-size:10px;background:#FCE7F3;color:#9D174D;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-left:8px;">NEW</span></div>
+        <div class="phase-subtitle">Отвечаем на комменты и DM пока горячо — 4ч в рабочее время, 24ч макс</div>
+        <div class="phase-actor actor-review">Я + агент</div>
+        <div class="phase-content">
+          <b>Ежедневный ритуал 15+15 мин</b> — утром и вечером. <code style="background:#F1F5F9;padding:2px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;">community-manager</code> проверяет все каналы (IG DM, TikTok comments, LinkedIn, FB, Twitter), отвечает по saved replies, эскалирует тебе только сложные случаи. Лиды B2B попадают в Linear как <b>VIS-LEAD-XXX</b>, баги — к dev-команде.
+        </div>
+        <div class="phase-io"><b>Вход:</b> комменты + DM после публикации &nbsp;→&nbsp; <b>Выход:</b> ответы в 4ч, лиды в Linear, метрики в weekly report</div>
+      </div>
+      <div class="phase-sidebar">
+        <div class="sidebar-block sidebar-agents">
+          <b>Агенты</b>
+          <span class="agent-chip">community-manager</span>
+          <span class="agent-chip">content-creator</span>
+        </div>
+        <div class="sidebar-block sidebar-you">
+          <b>От тебя</b>
+          ~10 мин/день на сложные ответы (публичная критика, лиды, legal, баг-репорты). Рутину закрывает агент.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ NEW SYSTEMS -->
+<section class="section">
+  <div class="section-head"><h3>Системы-страховки — 6 дополнительных инструментов</h3><div class="line"></div></div>
+  <div class="timeline">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:240px;">Система</th>
+          <th style="width:140px;">Фаза</th>
+          <th>Что делает</th>
+          <th style="width:220px;">Документ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>🗣️ Brand Voice Guide</b></td><td>Все фазы</td><td>Единый голос бренда для всех агентов — тон, стоп-слова, do/don't, специфика RU/EN</td><td><code>docs/brand/voice-guide.md</code></td></tr>
+        <tr><td><b>🔁 Content Repurposing</b></td><td>07 → повтор 03</td><td>Hit-пост (ER ≥ 2× avg) автоматически превращается в 4 новых формата на других платформах</td><td><code>docs/strategy/content-repurposing.md</code></td></tr>
+        <tr><td><b>💰 Organic → Paid</b></td><td>07 триггер</td><td>Winning-пост кандидат на Meta/TikTok Ads boost €50–200 — single-click approval</td><td><code>docs/strategy/organic-to-paid-trigger.md</code></td></tr>
+        <tr><td><b>🌲 Evergreen Bank</b></td><td>Backup</td><td>Запас 18+ готовых постов в <code>content/evergreen/ready/</code> на случай аврала или отпуска</td><td><code>docs/strategy/evergreen-bank.md</code></td></tr>
+        <tr><td><b>👀 Trend Watcher</b></td><td>До 00</td><td>Еженедельный дайджест: конкуренты (Booksy, Versum), beauty-тренды, SaaS-тренды → план недели</td><td><code>docs/ops/trend-watching.md</code></td></tr>
+        <tr><td><b>🚨 Crisis Playbook</b></td><td>Override</td><td>4 типа кризисов + kill switch «EMERGENCY PAUSE» для экстренной паузы всего</td><td><code>docs/ops/crisis-playbook.md</code></td></tr>
+        <tr><td><b>📅 Blackout Dates</b></td><td>07 pre-check</td><td>Траур, праздники, чувствительные даты — пост автоматически переносится</td><td><code>docs/ops/blackout-dates.md</code></td></tr>
+        <tr><td><b>🌐 Translation QA</b></td><td>03</td><td>Не переводим — переписываем под нативную аудиторию. Проверка на «переводизмы»</td><td><code>docs/ops/translation-qa.md</code></td></tr>
+        <tr><td><b>📝 Model Release</b></td><td>04</td><td>Юридическое согласие от каждого в кадре. Без подписи — не публикуем</td><td><code>docs/templates/model-release-{ru,en}.md</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ TIMELINE -->
+<section class="section">
+  <div class="section-head"><h3>Timing — сколько занимает каждая фаза</h3><div class="line"></div></div>
+  <div class="timeline">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:100px;">Фаза</th>
+          <th style="width:80px;">Время</th>
+          <th style="width:140px;">Кто работает</th>
+          <th>Что происходит</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>00 Анализ + trends</td><td>30 мин</td><td>Агенты + 5 мин чтения</td><td>Metrics pull, ранжирование постов, trend digest, 3 рекомендации</td></tr>
+        <tr><td>01 Планирование</td><td>5 мин</td><td>Я + product-manager</td><td>Открываю план недели, запускаю декомпозицию в Linear</td></tr>
+        <tr><td>02 Стратегия</td><td>15–30 мин</td><td>Агенты</td><td>Хуки, хэштеги, trending sounds</td></tr>
+        <tr><td>03 Генерация</td><td>1–2 часа</td><td>Агенты</td><td>Тексты, карусели, сценарии (+ brand voice guide)</td></tr>
+        <tr><td>04 Твой вклад</td><td><b>2–4 часа/нед</b></td><td><b>Ты</b></td><td>Чтение, съёмка (1 день × 4–5ч раз в 1–2 нед)</td></tr>
+        <tr><td>05 Пост-продакшн</td><td>30 мин/видео</td><td>Агент или ты в CapCut</td><td>Монтаж, субтитры, форматы, translation QA</td></tr>
+        <tr><td>06 QA Review</td><td>10 мин</td><td>Агент + 1 мин/пост</td><td>Проверка по AC + brand voice + model releases</td></tr>
+        <tr><td>07 Публикация</td><td>Автоматика</td><td>n8n / cron</td><td>Публикация + blackout pre-check + 48h auto-triggers</td></tr>
+        <tr><td>08 Engagement</td><td>15+15 мин/день</td><td>community-manager + 10 мин/день ты</td><td>Ответы на комменты/DM, эскалация сложных кейсов</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:14px; padding:12px 16px; background:#DCFCE7; border-radius:var(--radius-sm); font-size:12px; color:#166534;">
+    <b>Итого твоего времени в неделю:</b> ~4–6 часов (чтение текстов + съёмка раз в 1–2 нед + апрувы + ~10 мин/день на community management + ~5 мин weekly report). Всё остальное делают агенты.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ COMMANDS -->
+<section class="section">
+  <div class="section-head"><h3>Команды — что говорить мне в Claude Code</h3><div class="line"></div></div>
+  <div class="cta-block">
+    <h4>🎙️ Готовые промпты для запуска pipeline</h4>
+    <p>Просто скопируй и вставь в чат с Claude Code в папке <code>VisiTimeContent</code>:</p>
+    <div class="cta-prompts">
+      <div class="cta-prompt"># Запустить план недели целиком (фазы 1–3)
+подготовь контент на неделю 1 — создай задачи в Linear, напиши тексты и сценарии</div>
+
+      <div class="cta-prompt"># Только один пост
+напиши пост «Почему я строю VisiTime» — LinkedIn + Twitter thread</div>
+
+      <div class="cta-prompt"># Карусель с макетом
+сделай карусель «5 красных флагов плохого салона» — 7 слайдов в Figma</div>
+
+      <div class="cta-prompt"># Видео-сценарий + shotlist
+подготовь сценарий и shotlist для скетча «Клиент не берёт трубку» (TikTok 20с)</div>
+
+      <div class="cta-prompt"># После съёмки
+я снял видео для поста №9, raw в production/raw-footage/ — смонтируй и подготовь версии для TikTok и IG Reel</div>
+
+      <div class="cta-prompt"># QA перед публикацией
+проверь пост №1 по Acceptance Criteria — готов ли к публикации</div>
+
+      <div class="cta-prompt"># Запустить автопостинг
+опубликуй одобренные посты недели 1 по расписанию через n8n</div>
+
+      <div class="cta-prompt"># Еженедельный отчёт (Фаза 00)
+собери метрики прошлой недели по всем каналам и сделай weekly report с 3 рекомендациями</div>
+
+      <div class="cta-prompt"># Репурпосинг hit-поста
+репурпосни пост #N в 4 формата — IG carousel RU, Twitter thread, TikTok 30с, LinkedIn carousel EN</div>
+
+      <div class="cta-prompt"># Paid boost для winner-а
+настрой Meta Ads boost для поста #N — €100, 5 дней, Warsaw+Krakow, lookalike аудитория</div>
+
+      <div class="cta-prompt"># Community management (Фаза 08)
+проверь активность и ответь на комменты/DM за сегодня — используй saved replies из content/replies/</div>
+
+      <div class="cta-prompt"># Evergreen bank
+наполни evergreen bank — сделай 5 постов по темам из docs/strategy/evergreen-bank.md</div>
+
+      <div class="cta-prompt"># Trend digest
+сделай weekly trend digest — что у конкурентов, в beauty, в startup-сцене</div>
+
+      <div class="cta-prompt"># 🚨 EMERGENCY PAUSE (kill switch)
+EMERGENCY PAUSE — [причина]. Останови всю публикацию, автопостинг, Ads, response bots</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ AGENTS MAP -->
+<section class="section">
+  <div class="section-head"><h3>Карта агентов — кто за что отвечает</h3><div class="line"></div></div>
+  <div class="timeline">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:200px;">Агент</th>
+          <th style="width:90px;">Модель</th>
+          <th>Зона ответственности</th>
+          <th style="width:100px;">Фаза</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>analytics-specialist</b> <span style="font-size:9px;background:#EDE9FE;color:#6D28D9;padding:1px 6px;border-radius:10px;margin-left:4px;">NEW</span></td><td>cloud-smart</td><td>Сбор метрик, ранжирование постов, 3 рекомендации, триггеры repurpose/boost</td><td>00</td></tr>
+        <tr><td><b>trend-watcher</b> <span style="font-size:9px;background:#EDE9FE;color:#6D28D9;padding:1px 6px;border-radius:10px;margin-left:4px;">NEW</span></td><td>cloud-smart</td><td>Мониторинг Booksy/Versum/beauty-trends/SaaS — weekly digest</td><td>00</td></tr>
+        <tr><td><b>product-manager</b></td><td>cloud-smart</td><td>Декомпозиция плана недели в задачи Linear, приоритизация</td><td>01</td></tr>
+        <tr><td><b>social-media-strategist</b></td><td>cloud-max</td><td>Адаптация тем под специфику каждой соцсети, outreach strategy</td><td>02</td></tr>
+        <tr><td><b>tiktok-strategist</b></td><td>cloud-max</td><td>Trending sounds, первые 3 секунды, TikTok-механики</td><td>02</td></tr>
+        <tr><td><b>seo-specialist</b></td><td>cloud-smart</td><td>Хэштеги, keywords EN/RU, оптимизация описаний YouTube</td><td>02</td></tr>
+        <tr><td><b>narratologist</b></td><td>cloud-smart</td><td>5-актовая структура видео, нарративный скелет</td><td>03</td></tr>
+        <tr><td><b>content-creator</b></td><td>cloud-smart</td><td>Финальные тексты постов и сценариев EN/RU (по brand voice guide)</td><td>03 · 08</td></tr>
+        <tr><td><b>instagram-curator</b></td><td>cloud-smart</td><td>Структура каруселей, Reels-хуки, IG grid consistency</td><td>03</td></tr>
+        <tr><td><b>visual-storyteller</b></td><td>cloud-smart</td><td>Макеты в Figma, обложки, инфографика, бренд-стиль</td><td>03</td></tr>
+        <tr><td><b>short-video-editing-coach</b></td><td>cloud-smart</td><td>Shotlist, pacing, cut-list для монтажа</td><td>03 · 05</td></tr>
+        <tr><td><b>video-optimization-specialist</b></td><td>cloud-smart</td><td>Финальный монтаж, субтитры, ресайз под форматы, A/B обложки</td><td>05</td></tr>
+        <tr><td><b>qa-engineer</b></td><td>cloud-code</td><td>Проверка по AC + brand voice + model releases перед публикацией</td><td>06</td></tr>
+        <tr><td><b>community-manager</b> <span style="font-size:9px;background:#FCE7F3;color:#9D174D;padding:1px 6px;border-radius:10px;margin-left:4px;">NEW</span></td><td>cloud-smart</td><td>Ответы на комменты/DM по saved replies, эскалация сложных, сбор лидов в Linear</td><td>08</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</body>
+</html>

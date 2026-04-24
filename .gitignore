@@ -1,4 +1,37 @@
+# Secrets — НИКОГДА не коммитить
 .env
+.env.local
+.env.*.local
+secrets/
+*.pem
+*.key
+*-service-account.json
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+venv/
+.venv/
+
+# Node (если появится n8n локально)
+node_modules/
+npm-debug.log
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Media — raw footage тяжёлое, не коммитим
+production/raw-footage/
+production/edited/
+production/audio/
+
+# Content drafts — staging, не для git
+content/evergreen/drafts/*.md.draft

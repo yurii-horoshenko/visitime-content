@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services Dashboard — ORBITA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F5F7FA;
+      --card:      #FFFFFF;
+      --border:    #E2E8F0;
+      --muted:     #94A3B8;
+      --text:      #1A202C;
+      --text-dim:  #64748B;
+      --text-sm:   #475569;
+      --radius:    10px;
+      --radius-sm: 6px;
+    }
+
+    html { font-size: 14px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 24px 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    .page-header { margin-bottom: 40px; }
+    .page-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.4px;
+      line-height: 1.1;
+    }
+    .page-subtitle { font-size: 13px; color: var(--text-dim); margin-top: 6px; max-width: 720px; }
+    .page-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      margin: 0 -24px 32px;
+      padding: 0 24px;
+      scrollbar-width: none;
+    }
+    .nav-bar::-webkit-scrollbar { display: none; }
+    .nav-bar a {
+      display: block;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .nav-bar a:hover { color: var(--text); border-bottom-color: var(--border); }
+    .nav-bar a.active { color: #1E40AF; border-bottom-color: #1E40AF; }
+
+    /* ── SECTION ────────────────────────────────────────────── */
+    .section { margin-bottom: 56px; }
+
+    .root-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .root-banner.orbita {
+      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      border: 1px solid #BFDBFE;
+    }
+    .root-banner.project {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      border: 1px solid #FCD34D;
+    }
+    .root-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .root-title-block { flex: 1; min-width: 0; }
+    .root-kind {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .root-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+    .root-email {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: #1E40AF;
+      margin-top: 4px;
+    }
+    .root-banner.project .root-email { color: #92400E; }
+    .root-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 24px 0 14px;
+    }
+    .section-head h3 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+    }
+    .section-head .line { flex: 1; height: 1px; background: var(--border); }
+    .section-head .count {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* ── GRID ───────────────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    @media (min-width: 1200px) {
+      .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card:hover { border-color: #CBD5E1; transform: translateY(-1px); }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      background: var(--accent, var(--border));
+      opacity: 0.85;
+    }
+
+    .card-header { display: flex; align-items: center; gap: 10px; }
+    .service-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+      background: color-mix(in srgb, var(--accent, #94A3B8) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent, #94A3B8) 20%, transparent);
+    }
+    .service-name-group { flex: 1; min-width: 0; }
+    .service-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .service-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .badges { display: flex; flex-wrap: wrap; gap: 5px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .badge-orbita   { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .badge-project  { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+    .badge-free     { background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; }
+    .badge-isolation{ background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+    .badge-depends  { background: #FFF7ED; color: #9A3412; border: 1px solid #FED7AA; text-transform: none; font-weight: 500; }
+    .badge-phase    { font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: 0.5px; }
+    .badge-p0       { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+    .badge-p1       { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+    .badge-p2       { background: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .badge-p3       { background: #E0E7FF; color: #3730A3; border: 1px solid #C7D2FE; }
+    .badge-p4       { background: #F3E8FF; color: #6B21A8; border: 1px solid #E9D5FF; }
+
+    .sub-head {
+      display: flex; align-items: baseline; gap: 10px;
+      margin: 18px 0 10px 0;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--text-dim);
+    }
+    .sub-head .sub-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--text); color: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; letter-spacing: 0;
+    }
+    .sub-head .sub-line { flex: 1; height: 1px; background: var(--border); }
+    .sub-head .sub-desc {
+      text-transform: none; letter-spacing: 0; font-weight: 400;
+      font-size: 11px; color: var(--text-dim);
+    }
+
+    .card-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 -18px;
+    }
+
+    .card-purpose {
+      background: #F8FAFC;
+      border-left: 3px solid var(--accent, #CBD5E1);
+      padding: 10px 12px;
+      margin: 10px -4px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text-sm);
+    }
+    .card-purpose b {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+    .card-purpose .cp-section + .cp-section { margin-top: 8px; }
+    .card-purpose ul { margin: 2px 0 0 14px; padding: 0; }
+    .card-purpose li { margin: 2px 0; }
+
+    .kv-rows { display: flex; flex-direction: column; gap: 6px; }
+    .kv-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 8px;
+      align-items: start;
+      min-height: 20px;
+    }
+    .kv-label {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .kv-value {
+      font-size: 12px;
+      color: var(--text-sm);
+      min-width: 0;
+      word-break: break-all;
+    }
+    .kv-value.mono {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: #334155;
+    }
+
+    .card-open-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: auto;
+      flex-shrink: 0;
+      padding: 4px 9px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .card-open-link:hover {
+      background: #EFF6FF;
+      border-color: #93C5FD;
+      color: #1E40AF;
+    }
+    .card-open-link svg { width: 10px; height: 10px; opacity: 0.7; }
+
+    /* Reference chip — для ссылок проекта на ресурс ORBITA */
+    .ref-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-radius: 20px;
+      font-size: 11px;
+      color: #1E40AF;
+      font-family: 'Space Mono', monospace;
+      margin: 2px 4px 2px 0;
+    }
+    .ref-chip::before { content: '↗'; font-weight: 700; }
+
+    .ref-block {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+    .ref-block-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .summary-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      margin-bottom: 32px;
+    }
+    .summary-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .summary-col h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .summary-col ul { list-style: none; font-size: 12px; color: var(--text-sm); line-height: 1.9; }
+    .summary-col li::before { content: '·'; color: var(--muted); margin-right: 6px; }
+
+    .security-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 40px;
+      padding: 12px 16px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .rules-block {
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-top: 24px;
+    }
+    .rules-block h4 {
+      font-size: 12px;
+      color: #92400E;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+    .rules-block code {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      background: #fff;
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid #FDE68A;
+      color: #78350F;
+    }
+    .rules-block ol { padding-left: 20px; font-size: 12px; color: #78350F; line-height: 2; }
+
+    @media (max-width: 640px) {
+      body { padding: 20px 14px 48px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .nav-bar { margin: 0 -14px 24px; padding: 0 14px; }
+      .kv-row { grid-template-columns: 95px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header class="page-header">
+  <div class="page-tag">orbita · visitime · marketing launch</div>
+  <h1 class="page-title">Маркетинговые аккаунты — запуск Польша</h1>
+  <p class="page-meta">Обновлено 17.04.2026 · <b style="color:#1E40AF;">13 сервисов</b> · приоритет и порядок настройки · <a href="https://linear.app" target="_blank" style="color:#1E40AF;">VIS-31</a></p>
+</header>
+
+<section class="section" id="marketing">
+
+  <!-- Marketing & Social accounts (VIS-31) -->
+  <div class="section-head">
+    <h3>Маркетинговые аккаунты — запуск Польша</h3>
+    <div class="line"></div>
+    <span class="count">13 сервисов · <a href="https://linear.app" target="_blank" style="color:#1E40AF;text-decoration:none;">VIS-31</a></span>
+  </div>
+
+  <div class="ref-block" style="background:#EFF6FF;border-color:#BFDBFE;">
+    <div class="ref-block-title" style="color:#1E40AF;">📧 Стратегия email (без Google Workspace)</div>
+    <div style="font-size:12px; color:var(--text-sm); line-height:1.8;">
+      · <b>Логин в сервисы</b> — используем <span class="kv-value mono">orbita.helpdesk@gmail.com</span> или <span class="kv-value mono">visitime.helpdesk@gmail.com</span><br>
+      · <b>Публичный email в профилях</b> (FB/IG/LinkedIn bio) — <span class="kv-value mono">hello@visitime.app</span> через <b>Cloudflare Email Routing</b> (бесплатный forward → visitime.helpdesk)<br>
+      · <b>Google Workspace не создаём</b> — $6/мес на пользователя не нужны, алиасов Cloudflare достаточно
+    </div>
+  </div>
+
+  <div class="ref-block" style="background:#F5F3FF;border-color:#DDD6FE;margin-top:12px;">
+    <div class="ref-block-title" style="color:#6D28D9;">🔑 Стратегия доступов — без shared-паролей</div>
+    <div style="font-size:12px; color:var(--text-sm); line-height:1.7; margin-bottom:12px;">
+      Идея: <b>отдельный</b> <span class="kv-value mono">marketing.visitime@gmail.com</span> <b>не заводим</b> — это создаёт третий ящик без ясной зоны ответственности. Доступ даётся через <b>роли</b> и <b>SMM-tool</b>, а не через общий пароль. <span class="kv-value mono">marketing@visitime.app</span> (Cloudflare-алиас) закрывает все нужды: bio-контакт, логин в SMM-tool, уведомления от рекламных кабинетов.
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead>
+        <tr style="background:#FAF5FF;border-bottom:1px solid #DDD6FE;">
+          <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6D28D9;">Группа</th>
+          <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6D28D9;">Логин / метод</th>
+          <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6D28D9;">Кто работает</th>
+        </tr>
+      </thead>
+      <tbody style="color:var(--text-sm);">
+        <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">Инфра (Meta BM, GA4, Google Ads, YouTube)</td><td style="padding:8px 10px;"><span class="kv-value mono">orbita.helpdesk</span></td><td style="padding:8px 10px;">только Yurii + delegation (invite личного email)</td></tr>
+        <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">Публичные (FB, IG, TikTok, GBP, WA)</td><td style="padding:8px 10px;"><span class="kv-value mono">visitime.helpdesk</span></td><td style="padding:8px 10px;">Yurii + delegation + Bitwarden Collection «VisiTime Social»</td></tr>
+        <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">LinkedIn Page</td><td style="padding:8px 10px;">личный <b>Yurii Horoshenko</b></td><td style="padding:8px 10px;">+ SMM как Content admin через свой LinkedIn</td></tr>
+        <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">SMM постинг (Buffer / Metricool / Publer)</td><td style="padding:8px 10px;">tool на <span class="kv-value mono">marketing@visitime.app</span></td><td style="padding:8px 10px;">маркетолог как team member + AI-агенты</td></tr>
+        <tr><td style="padding:8px 10px;font-weight:600;color:var(--text);">Автопостинг / API</td><td style="padding:8px 10px;">токены в секретах (Bitwarden / .env)</td><td style="padding:8px 10px;">AI-агенты (Meta Graph, TikTok Posting, LinkedIn Marketing, YouTube Data API)</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px; color:var(--text-dim); line-height:1.7; margin-top:12px; padding-top:10px; border-top:1px dashed #DDD6FE;">
+      <b style="color:#6D28D9;">3 паттерна доступа:</b><br>
+      · <b>Platform-native delegation</b> — основной способ для Meta BM, Google Ads, GA4, TikTok Business Center, YouTube, GBP, LinkedIn. Маркетолог заходит под своим email, пароли <span class="kv-value mono">*.helpdesk</span> никто не трогает.<br>
+      · <b>Shared login через Bitwarden Collection</b> — для Instagram/TikTok (нативные приложения для съёмки Reels и контента), пароль не виден текстом.<br>
+      · <b>SMM-tool с OAuth</b> — один инструмент (Buffer $15 / Metricool €18 / Publer) подключается ко всем соцсетям, маркетолог и AI-агенты работают только там.
+    </div>
+  </div>
+
+  <div class="ref-block" style="background:#ECFDF5;border-color:#A7F3D0;margin-top:12px;">
+    <div class="ref-block-title" style="color:#047857;">🤖 Автопостинг — статус каналов</div>
+    <div style="font-size:12px; color:var(--text-sm); line-height:1.7; margin-bottom:12px;">
+      Реальность: AI-агент <b>не постит сам напрямую</b> — он генерирует контент и вызывает API платформ. Токены выдаются один раз, хранятся в секретах, оркестрирует <b>n8n / Make.com / cron</b>. Ниже — по каким каналам автопостинг работает «из коробки», а где нужны костыли.
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead>
+        <tr style="background:#D1FAE5;border-bottom:1px solid #A7F3D0;">
+          <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#047857;">Сервис</th>
+          <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#047857;">Статус</th>
+          <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#047857;">API / что можно</th>
+          <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#047857;">Что нужно для доступа</th>
+        </tr>
+      </thead>
+      <tbody style="color:var(--text-sm);">
+        <tr style="border-bottom:1px solid #D1FAE5;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">📘 Facebook Page</td><td style="padding:8px 10px;"><span style="color:#047857;font-weight:700;">✅ Ready</span></td><td style="padding:8px 10px;">Graph API · posts (text/photo/video/link), scheduled, carousels</td><td style="padding:8px 10px;">Page Access Token (long-lived → вечный) через Meta BM</td></tr>
+        <tr style="border-bottom:1px solid #D1FAE5;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">📸 Instagram Business</td><td style="padding:8px 10px;"><span style="color:#047857;font-weight:700;">✅ Ready</span></td><td style="padding:8px 10px;">Graph API · feed photo/video, Reels, carousels</td><td style="padding:8px 10px;">Business account + связка с FB Page + тот же Meta token</td></tr>
+        <tr style="border-bottom:1px solid #D1FAE5;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">▶️ YouTube</td><td style="padding:8px 10px;"><span style="color:#047857;font-weight:700;">✅ Ready</span></td><td style="padding:8px 10px;">Data API v3 · загрузка видео, обложки, описания, плейлисты, комменты</td><td style="padding:8px 10px;">OAuth через Google Cloud project + refresh token</td></tr>
+        <tr style="border-bottom:1px solid #D1FAE5;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">📍 Google Business Profile</td><td style="padding:8px 10px;"><span style="color:#047857;font-weight:700;">✅ Ready</span></td><td style="padding:8px 10px;">Business Profile API · posts, events, offers, обновления</td><td style="padding:8px 10px;">OAuth Google + верифицированный профиль</td></tr>
+        <tr style="border-bottom:1px solid #D1FAE5;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">💼 LinkedIn Company Page</td><td style="padding:8px 10px;"><span style="color:#047857;font-weight:700;">✅ Ready</span></td><td style="padding:8px 10px;">Marketing/Share API · text + media posts от имени компании</td><td style="padding:8px 10px;">Partner access (авто для Company admin) + OAuth</td></tr>
+        <tr style="border-bottom:1px solid #D1FAE5;background:#FFFBEB;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">🎵 TikTok Business</td><td style="padding:8px 10px;"><span style="color:#B45309;font-weight:700;">⚠️ Approval</span></td><td style="padding:8px 10px;">Content Posting API · видео, photo carousels, drafts</td><td style="padding:8px 10px;">Заявка approved app, review <b>2–4 недели</b>. До аппрува — Metricool</td></tr>
+        <tr style="border-bottom:1px solid #D1FAE5;background:#FFFBEB;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">💬 WhatsApp Business</td><td style="padding:8px 10px;"><span style="color:#B45309;font-weight:700;">⚠️ Templates</span></td><td style="padding:8px 10px;">Cloud API (Meta) · outbound только approved шаблоны; входящие автоответы свободно</td><td style="padding:8px 10px;">Meta WhatsApp Business Platform + approval шаблонов</td></tr>
+        <tr style="border-bottom:1px solid #D1FAE5;background:#F3F4F6;"><td style="padding:8px 10px;font-weight:600;color:var(--text-dim);">📢 Meta Ads / 🎯 Google Ads / 📢 TikTok Ads</td><td style="padding:8px 10px;"><span style="color:#6B7280;font-weight:700;">➖ N/A</span></td><td style="padding:8px 10px;">API для управления рекламными кампаниями, не органикой</td><td style="padding:8px 10px;">Отдельная автоматизация — не постинг</td></tr>
+        <tr style="background:#F3F4F6;"><td style="padding:8px 10px;font-weight:600;color:var(--text-dim);">📨 Cloudflare · 📈 GA4 · 🎯 Meta Pixel</td><td style="padding:8px 10px;"><span style="color:#6B7280;font-weight:700;">➖ N/A</span></td><td style="padding:8px 10px;">Инфраструктура / аналитика — не контентные каналы</td><td style="padding:8px 10px;">—</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px; color:var(--text-dim); line-height:1.7; margin-top:12px; padding-top:10px; border-top:1px dashed #A7F3D0;">
+      <b style="color:#047857;">Рекомендуемый сетап автопостинга:</b><br>
+      · <b>Оркестратор</b> — n8n (self-hosted, free) или Make.com ($9+/мес) или cron + Python/Node<br>
+      · <b>Секреты</b> — <span class="kv-value mono">META_PAGE_ACCESS_TOKEN</span>, <span class="kv-value mono">GOOGLE_OAUTH_REFRESH_TOKEN</span>, <span class="kv-value mono">LINKEDIN_ACCESS_TOKEN</span>, <span class="kv-value mono">TIKTOK_ACCESS_TOKEN</span> в Bitwarden / .env<br>
+      · <b>AI-агент</b> — генерация постов, caption + hashtags, ресайз под форматы (1:1 / 4:5 / 9:16), best-time по TZ Warsaw, A/B варианты, анализ метрик<br>
+      · <b>SMM-tool fallback</b> — Metricool €18/мес закрывает TikTok без approval и все 5 ready-каналов через OAuth (если не хочешь возиться с API напрямую)
+    </div>
+    <div style="font-size:11px; color:#047857; line-height:1.7; margin-top:10px; padding:10px 12px;background:#D1FAE5;border-radius:var(--radius-sm);">
+      <b>Поэтапный план запуска автопостинга:</b><br>
+      <b>Неделя 1</b> — Meta (FB + IG) + Google (YouTube + GBP) через прямые API → 4 канала, 80% трафика &nbsp;·&nbsp;
+      <b>Неделя 2</b> — LinkedIn (B2B) &nbsp;·&nbsp;
+      <b>Параллельно</b> — заявка на TikTok Content Posting API, до аппрува через Metricool &nbsp;·&nbsp;
+      <b>Когда будет база номеров</b> — WhatsApp template-бродкасты через Meta Cloud API
+    </div>
+  </div>
+
+  <div class="cards-grid" style="margin-top:14px;">
+
+    <div class="card" style="--accent:#F6821F;">
+      <div class="card-header">
+        <div class="service-icon">📨</div>
+        <div class="service-name-group">
+          <div class="service-name">Cloudflare Email Routing</div>
+          <div class="service-desc">Шаг 0 · настроить forward алиасов visitime.app</div>
+        </div>
+        <a href="https://dash.cloudflare.com" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p0">P0 · setup of #3</span><span class="badge badge-orbita">orbita.helpdesk</span><span class="badge badge-free">Free</span><span class="badge badge-project">ПЕРВЫЙ</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Бесплатные алиасы на домене <span class="kv-value mono">visitime.app</span> — всё падает в общий ящик. Экономим ~$6/мес на пользователя vs Google Workspace. Без этого нельзя поставить <span class="kv-value mono">hello@visitime.app</span> в bio соцсетей и на сайт.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li><span class="kv-value mono">hello@</span> — публичный email (FB/IG bio, LinkedIn, сайт)</li>
+            <li><span class="kv-value mono">marketing@</span> — рекламные сервисы</li>
+            <li><span class="kv-value mono">ads@</span> — уведомления от Meta/TikTok/Google Ads</li>
+            <li><span class="kv-value mono">support@</span> — поддержка (на будущее)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">hello@</span><span class="kv-value">→ visitime.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">marketing@</span><span class="kv-value">→ visitime.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">ads@</span><span class="kv-value">→ visitime.helpdesk@gmail.com</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#E8710A;">
+      <div class="card-header">
+        <div class="service-icon">📈</div>
+        <div class="service-name-group">
+          <div class="service-name">Google Analytics 4</div>
+          <div class="service-desc">Property VisiTime App · Poland · PLN</div>
+        </div>
+        <a href="https://analytics.google.com" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p1">P1 · instance #7</span><span class="badge badge-orbita">orbita.helpdesk</span><span class="badge badge-project">КРИТИЧНЫЙ</span><span class="badge badge-depends">← Property из GA4 ORBITA root</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Фундамент всей аналитики. Без GA4 не работает оптимизация Google Ads и Meta Ads — нечего передавать как конверсии. Все остальные рекламные сервисы зависят от этого пункта.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Property «VisiTime App» внутри ORBITA root account</li>
+            <li>Events: <span class="kv-value mono">app_install</span>, <span class="kv-value mono">sign_up</span>, <span class="kv-value mono">booking_created</span>, <span class="kv-value mono">booking_completed</span>, <span class="kv-value mono">purchase</span></li>
+            <li>Conversions: <span class="kv-value mono">booking_completed</span>, <span class="kv-value mono">sign_up</span></li>
+            <li>UTM-конвенция для всех кампаний</li>
+            <li>Link с Google Ads (импорт конверсий)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">orbita.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Account</span><span class="kv-value">ORBITA</span></div>
+        <div class="kv-row"><span class="kv-label">Property</span><span class="kv-value">VisiTime App</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#0668E1;">
+      <div class="card-header">
+        <div class="service-icon">🏢</div>
+        <div class="service-name-group">
+          <div class="service-name">Meta Business Manager</div>
+          <div class="service-desc">Один на всю компанию · assets внутри</div>
+        </div>
+        <a href="https://business.facebook.com/overview" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #13</span><span class="badge badge-orbita">orbita.helpdesk</span><span class="badge badge-project">КРИТИЧНЫЙ</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Контейнер-«зонтик» для всей Meta-экосистемы: внутри лежат ad accounts, pages, pixels, каталоги, домены. Один BM на всю компанию ORBITA — управление доступами, биллингом и Domain verification в одном месте.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Business: ORBITA</li>
+            <li>Domain verification для <span class="kv-value mono">visitime.app</span></li>
+            <li>Ad Account «VisiTime — Poland» (валюта PLN, TZ Warsaw)</li>
+            <li>Payment method (карта компании)</li>
+            <li>Data sources, users, partners (доступы для подрядчиков)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">orbita.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Business</span><span class="kv-value">ORBITA</span></div>
+        <div class="kv-row"><span class="kv-label">Ad Account</span><span class="kv-value">VisiTime — Poland (PLN)</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#1877F2;">
+      <div class="card-header">
+        <div class="service-icon">📘</div>
+        <div class="service-name-group">
+          <div class="service-name">Facebook Page</div>
+          <div class="service-desc">facebook.com/visitime · Book Now кнопка</div>
+        </div>
+        <a href="https://www.facebook.com/pages/create" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #14</span><span class="badge badge-project">visitime.helpdesk</span><span class="badge badge-project">КРИТИЧНЫЙ</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Обязательный asset для запуска Meta Ads — без Page реклама не крутится. Плюс органика, кнопка <b>Book Now</b>, Messenger как канал лидов и привязка к Instagram Business.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Category: Software / App</li>
+            <li>Username <span class="kv-value mono">@visitime</span>, обложка, описание (PL + EN)</li>
+            <li>Кнопка <b>Book Now</b> → deep link в приложение</li>
+            <li>Публичный контакт: <span class="kv-value mono">hello@visitime.app</span>, WhatsApp, сайт</li>
+            <li>Services list, About, расписание постов</li>
+            <li>Добавить Page как asset в Meta BM ORBITA</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">visitime.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Username</span><span class="kv-value mono">visitime</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+        <div class="kv-row"><span class="kv-label">Asset в</span><span class="kv-value">Meta BM ORBITA</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#E4405F;">
+      <div class="card-header">
+        <div class="service-icon">📸</div>
+        <div class="service-name-group">
+          <div class="service-name">Instagram Business</div>
+          <div class="service-desc">@visitime · привязан к FB Page · Highlights</div>
+        </div>
+        <a href="https://www.instagram.com/accounts/emailsignup/" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #15</span><span class="badge badge-project">visitime.helpdesk</span><span class="badge badge-project">КРИТИЧНЫЙ</span><span class="badge badge-depends">← связан с FB Page</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Основной канал контента для B2C — ногти/волосы визуальная ниша, Instagram её главный движок. Обязательна связка с FB Page через Meta BM, иначе не работают Ads, Shopping и Insights.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Username <span class="kv-value mono">@visitime</span>, аватар, bio на польском</li>
+            <li>Link-in-bio (Linktree или свой лендинг)</li>
+            <li>Highlights: «Jak to działa», «Dla salonów», «Opinie», «Promocje»</li>
+            <li>Contact button: <span class="kv-value mono">hello@visitime.app</span> + WhatsApp</li>
+            <li>Привязка к FB Page через Meta BM</li>
+            <li>Переключить в Business account (для статистики и Ads)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">visitime.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Username</span><span class="kv-value mono">@visitime</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#1877F2;">
+      <div class="card-header">
+        <div class="service-icon">🎯</div>
+        <div class="service-name-group">
+          <div class="service-name">Meta Pixel</div>
+          <div class="service-desc">VisiTime Website Pixel · внутри Meta BM</div>
+        </div>
+        <a href="https://business.facebook.com/events_manager" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #16</span><span class="badge badge-orbita">через Meta BM</span><span class="badge badge-project">КРИТИЧНЫЙ</span><span class="badge badge-depends">← внутри Meta BM</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Трекинг конверсий с сайта для оптимизации Meta Ads. Без пикселя реклама работает вслепую — нельзя обучать lookalike, делать retargeting, считать ROAS.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Pixel «VisiTime Website» в Meta BM</li>
+            <li>Events: <span class="kv-value mono">PageView</span>, <span class="kv-value mono">Lead</span>, <span class="kv-value mono">CompleteRegistration</span>, <span class="kv-value mono">Purchase</span> (бронирование)</li>
+            <li>Conversions API (server-side) — обход iOS 14+ ограничений</li>
+            <li>Custom Audiences: visitors 30/90 дней</li>
+            <li>Lookalike Audiences по конверсиям</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Website</span><span class="kv-value mono">visitime.app</span></div>
+        <div class="kv-row"><span class="kv-label">Управление</span><span class="kv-value">Meta BM ORBITA</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#000000;">
+      <div class="card-header">
+        <div class="service-icon">🎵</div>
+        <div class="service-name-group">
+          <div class="service-name">TikTok Business</div>
+          <div class="service-desc">@visitime · Software & App</div>
+        </div>
+        <a href="https://www.tiktok.com/signup" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #17</span><span class="badge badge-project">visitime.helpdesk</span><span class="badge badge-project">КРИТИЧНЫЙ</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Органический охват польской аудитории Gen Z / Millennials. TikTok сейчас самый дешёвый канал roста для beauty-ниши в Польше, а также обязательный контейнер для запуска TikTok Ads и Spark Ads.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Username <span class="kv-value mono">@visitime</span>, категория Software & App</li>
+            <li>Bio на польском, link-in-bio</li>
+            <li>Контент-план: behind-the-scenes салонов, советы, отзывы, челленджи</li>
+            <li>Связка с Ads Manager (для Spark Ads — продвижение органики)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">visitime.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Username</span><span class="kv-value mono">@visitime</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#FE2C55;">
+      <div class="card-header">
+        <div class="service-icon">📢</div>
+        <div class="service-name-group">
+          <div class="service-name">TikTok Ads + Pixel</div>
+          <div class="service-desc">Poland · VisiTime Web Pixel</div>
+        </div>
+        <a href="https://ads.tiktok.com/i18n/signup" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #18</span><span class="badge badge-project">visitime.helpdesk</span><span class="badge badge-project">КРИТИЧНЫЙ</span><span class="badge badge-depends">← связан с TikTok Business</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Платный трафик на Польшу. TikTok Ads дешевле Meta Ads на старте и даёт высокий охват younger audience. Пиксель нужен для оптимизации и retargeting тех, кто уже был на сайте.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Ad Account Poland (валюта PLN)</li>
+            <li>TikTok Pixel на <span class="kv-value mono">visitime.app</span></li>
+            <li>Events: <span class="kv-value mono">ViewContent</span>, <span class="kv-value mono">Registration</span>, <span class="kv-value mono">CompletePayment</span></li>
+            <li>Custom Audiences из пикселя</li>
+            <li>Spark Ads — промо органических видео с @visitime</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">visitime.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Country</span><span class="kv-value">Poland</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#4285F4;">
+      <div class="card-header">
+        <div class="service-icon">🎯</div>
+        <div class="service-name-group">
+          <div class="service-name">Google Ads</div>
+          <div class="service-desc">MCC ORBITA · sub-account VisiTime PLN</div>
+        </div>
+        <a href="https://ads.google.com" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #19</span><span class="badge badge-orbita">orbita.helpdesk</span><span class="badge badge-project">КРИТИЧНЫЙ</span><span class="badge badge-depends">← sub-account MCC ORBITA · конверсии из GA4</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Три задачи: поисковая реклама с high-intent запросами («rezerwacja online salon»), YouTube Ads и App Campaigns (UAC) для установок iOS/Android. Единственный канал, который ловит пользователя в момент активного поиска решения.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>MCC ORBITA → sub-account «VisiTime PLN»</li>
+            <li>Linked с GA4 (импорт конверсий)</li>
+            <li>Linked с Google Play и App Store Connect (для UAC)</li>
+            <li>Campaigns: Search (brand + generic PL), Performance Max, App Install</li>
+            <li>Negative keywords list (чтобы не сливать бюджет)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">orbita.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Country/TZ</span><span class="kv-value">Poland / Warsaw</span></div>
+        <div class="kv-row"><span class="kv-label">Currency</span><span class="kv-value">PLN</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#34A853;">
+      <div class="card-header">
+        <div class="service-icon">📍</div>
+        <div class="service-name-group">
+          <div class="service-name">Google Business Profile</div>
+          <div class="service-desc">Software Company · Poland · 5 воеводств</div>
+        </div>
+        <a href="https://business.google.com" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #20</span><span class="badge badge-project">visitime.helpdesk</span><span class="badge badge-project">ВАЖНЫЙ</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Присутствие в Google Maps и Local Pack — B2B салоны ищут сервис бронирования через Google. Плюс — SEO-буст, управление отзывами, бесплатный трафик. Не блокирует запуск, но сильно помогает доверию.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Business: VisiTime, категория Software Company</li>
+            <li>Service area: 5 воеводств (Mazowieckie, Małopolskie, Wielkopolskie, Śląskie, Dolnośląskie)</li>
+            <li>Verification: Video или Postcard (нужен польский адрес)</li>
+            <li>Photos, Posts, Services list, Q&amp;A</li>
+            <li>Процесс сбора и ответа на отзывы</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">visitime.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Business</span><span class="kv-value">VisiTime</span></div>
+        <div class="kv-row"><span class="kv-label">Verify</span><span class="kv-value">Video / Postcard</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#0A66C2;">
+      <div class="card-header">
+        <div class="service-icon">💼</div>
+        <div class="service-name-group">
+          <div class="service-name">LinkedIn Company Page</div>
+          <div class="service-desc">linkedin.com/company/visitime · B2B</div>
+        </div>
+        <a href="https://www.linkedin.com/company/setup/new/" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #21</span><span class="badge badge-orbita">личный LinkedIn</span><span class="badge badge-project">B2B</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>B2B-канал продаж салонам красоты. Outbound ведётся через личный LinkedIn Yurii, а Company Page — легитимация («это не частник, это компания») и точка сбора кейсов, отзывов, вакансий.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li><span class="kv-value mono">linkedin.com/company/visitime</span></li>
+            <li>About: PL + EN, Industry: Software Development</li>
+            <li>Showcase pages (если появится отдельный продукт для салонов)</li>
+            <li>Контент: case studies, отзывы владельцев салонов, новости продукта</li>
+            <li>LinkedIn Ads позже — таргет owners of beauty salons в PL</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Создаётся</span><span class="kv-value">через личный LinkedIn Yurii</span></div>
+        <div class="kv-row"><span class="kv-label">Notifications</span><span class="kv-value mono">orbita.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#FF0000;">
+      <div class="card-header">
+        <div class="service-icon">▶️</div>
+        <div class="service-name-group">
+          <div class="service-name">YouTube Channel</div>
+          <div class="service-desc">@visitime · Brand Channel внутри ORBITA Google</div>
+        </div>
+        <a href="https://studio.youtube.com" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #22</span><span class="badge badge-orbita">orbita.helpdesk</span><span class="badge badge-free">Месяц 2+</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Три задачи: tutorials для салонов («настройка за 5 минут»), long-form отзывы владельцев, SEO (YouTube — #2 поисковик в мире). Плюс — обязательный host для видео в Google Ads UAC (video assets должны где-то лежать).</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Brand channel <span class="kv-value mono">@visitime</span> внутри ORBITA Google account</li>
+            <li>Sections: Tutorials, Opinie, Funkcje, Case studies</li>
+            <li>End screens → сайт / установка приложения</li>
+            <li>Link с Google Ads для video campaigns</li>
+            <li>Можно отложить на месяц 2+ — не блокирует запуск</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">orbita.helpdesk@gmail.com</span></div>
+        <div class="kv-row"><span class="kv-label">Handle</span><span class="kv-value mono">@visitime</span></div>
+        <div class="kv-row"><span class="kv-label">Country</span><span class="kv-value">Poland</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:#25D366;">
+      <div class="card-header">
+        <div class="service-icon">💬</div>
+        <div class="service-name-group">
+          <div class="service-name">WhatsApp Business</div>
+          <div class="service-desc">Польский номер +48 · автоответ · Quick Replies</div>
+        </div>
+        <a href="https://www.whatsapp.com/download" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+      </div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #23</span><span class="badge badge-project">номер · не email</span><span class="badge badge-project">Поддержка</span><span class="badge badge-depends">← номер из Twilio</span></div>
+      <div class="card-purpose">
+        <div class="cp-section"><b>Зачем</b>Польский рынок живёт в WhatsApp — салоны пишут туда, а не на email. Плюс очень дешёвый канал лидов через Click-to-WhatsApp Ads в Meta: пользователь с ленты попадает сразу в диалог, без формы и сайта.</div>
+        <div class="cp-section"><b>Что заводим</b>
+          <ul>
+            <li>Польский номер <span class="kv-value mono">+48...</span> через Twilio (sub-account VisiTime)</li>
+            <li>Greeting message, Away message, Quick Replies (PL)</li>
+            <li>Catalog с тарифами для салонов</li>
+            <li>Click-to-WhatsApp кнопка в Meta Ads (FB + IG)</li>
+            <li>Интеграция с CRM (позже) — чтобы диалоги не терялись</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="kv-rows">
+        <div class="kv-row"><span class="kv-label">Phone</span><span class="kv-value">+48 ... (через Twilio VisiTime)</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+</body>
+</html>
