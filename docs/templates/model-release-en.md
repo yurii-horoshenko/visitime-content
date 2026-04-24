@@ -27,14 +27,14 @@ This consent covers:
    geographic region on any platform.
 3. Editing and post-production (subtitles, color correction, text overlays) that
    do not distort the original meaning.
-4. Use on visitime.app and in marketing materials.
+4. Use on visitime.net and in marketing materials.
 
 Duration: indefinite.
 Territory: worldwide.
 Compensation: _________________________ (amount, "no compensation", or
 "barter: free access to VisiTime for __ months").
 
-Right to withdraw: I may send a written request to hello@visitime.app,
+Right to withdraw: I may send a written request to hello@visitime.net,
 after which content will be removed from official channels within 30 days.
 Content already distributed in active ad campaigns will stop running at the
 next campaign refresh cycle.

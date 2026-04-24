@@ -484,7 +484,7 @@
     <div class="ref-block-title" style="color:#1E40AF;">📧 Стратегия email (без Google Workspace)</div>
     <div style="font-size:12px; color:var(--text-sm); line-height:1.8;">
       · <b>Логин в сервисы</b> — используем <span class="kv-value mono">orbita.helpdesk@gmail.com</span> или <span class="kv-value mono">visitime.helpdesk@gmail.com</span><br>
-      · <b>Публичный email в профилях</b> (FB/IG/LinkedIn bio) — <span class="kv-value mono">hello@visitime.app</span> через <b>Cloudflare Email Routing</b> (бесплатный forward → visitime.helpdesk)<br>
+      · <b>Публичный email в профилях</b> (FB/IG/LinkedIn bio) — <span class="kv-value mono">hello@visitime.net</span> через <b>Cloudflare Email Routing</b> (бесплатный forward → visitime.helpdesk)<br>
       · <b>Google Workspace не создаём</b> — $6/мес на пользователя не нужны, алиасов Cloudflare достаточно
     </div>
   </div>
@@ -492,7 +492,7 @@
   <div class="ref-block" style="background:#F5F3FF;border-color:#DDD6FE;margin-top:12px;">
     <div class="ref-block-title" style="color:#6D28D9;">🔑 Стратегия доступов — без shared-паролей</div>
     <div style="font-size:12px; color:var(--text-sm); line-height:1.7; margin-bottom:12px;">
-      Идея: <b>отдельный</b> <span class="kv-value mono">marketing.visitime@gmail.com</span> <b>не заводим</b> — это создаёт третий ящик без ясной зоны ответственности. Доступ даётся через <b>роли</b> и <b>SMM-tool</b>, а не через общий пароль. <span class="kv-value mono">marketing@visitime.app</span> (Cloudflare-алиас) закрывает все нужды: bio-контакт, логин в SMM-tool, уведомления от рекламных кабинетов.
+      Идея: <b>отдельный</b> <span class="kv-value mono">marketing.visitime@gmail.com</span> <b>не заводим</b> — это создаёт третий ящик без ясной зоны ответственности. Доступ даётся через <b>роли</b> и <b>SMM-tool</b>, а не через общий пароль. <span class="kv-value mono">marketing@visitime.net</span> (Cloudflare-алиас) закрывает все нужды: bio-контакт, логин в SMM-tool, уведомления от рекламных кабинетов.
     </div>
     <table style="width:100%;border-collapse:collapse;font-size:12px;">
       <thead>
@@ -506,7 +506,7 @@
         <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">Инфра (Meta BM, GA4, Google Ads, YouTube)</td><td style="padding:8px 10px;"><span class="kv-value mono">orbita.helpdesk</span></td><td style="padding:8px 10px;">только Yurii + delegation (invite личного email)</td></tr>
         <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">Публичные (FB, IG, TikTok, GBP, WA)</td><td style="padding:8px 10px;"><span class="kv-value mono">visitime.helpdesk</span></td><td style="padding:8px 10px;">Yurii + delegation + Bitwarden Collection «VisiTime Social»</td></tr>
         <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">LinkedIn Page</td><td style="padding:8px 10px;">личный <b>Yurii Horoshenko</b></td><td style="padding:8px 10px;">+ SMM как Content admin через свой LinkedIn</td></tr>
-        <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">SMM постинг (Buffer / Metricool / Publer)</td><td style="padding:8px 10px;">tool на <span class="kv-value mono">marketing@visitime.app</span></td><td style="padding:8px 10px;">маркетолог как team member + AI-агенты</td></tr>
+        <tr style="border-bottom:1px solid #EDE9FE;"><td style="padding:8px 10px;font-weight:600;color:var(--text);">SMM постинг (Buffer / Metricool / Publer)</td><td style="padding:8px 10px;">tool на <span class="kv-value mono">marketing@visitime.net</span></td><td style="padding:8px 10px;">маркетолог как team member + AI-агенты</td></tr>
         <tr><td style="padding:8px 10px;font-weight:600;color:var(--text);">Автопостинг / API</td><td style="padding:8px 10px;">токены в секретах (Bitwarden / .env)</td><td style="padding:8px 10px;">AI-агенты (Meta Graph, TikTok Posting, LinkedIn Marketing, YouTube Data API)</td></tr>
       </tbody>
     </table>
@@ -567,13 +567,13 @@
         <div class="service-icon">📨</div>
         <div class="service-name-group">
           <div class="service-name">Cloudflare Email Routing</div>
-          <div class="service-desc">Шаг 0 · настроить forward алиасов visitime.app</div>
+          <div class="service-desc">Шаг 0 · настроить forward алиасов visitime.net</div>
         </div>
         <a href="https://dash.cloudflare.com" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
       </div>
       <div class="badges"><span class="badge badge-phase badge-p0">P0 · setup of #3</span><span class="badge badge-orbita">orbita.helpdesk</span><span class="badge badge-free">Free</span><span class="badge badge-project">ПЕРВЫЙ</span></div>
       <div class="card-purpose">
-        <div class="cp-section"><b>Зачем</b>Бесплатные алиасы на домене <span class="kv-value mono">visitime.app</span> — всё падает в общий ящик. Экономим ~$6/мес на пользователя vs Google Workspace. Без этого нельзя поставить <span class="kv-value mono">hello@visitime.app</span> в bio соцсетей и на сайт.</div>
+        <div class="cp-section"><b>Зачем</b>Бесплатные алиасы на домене <span class="kv-value mono">visitime.net</span> — всё падает в общий ящик. Экономим ~$6/мес на пользователя vs Google Workspace. Без этого нельзя поставить <span class="kv-value mono">hello@visitime.net</span> в bio соцсетей и на сайт.</div>
         <div class="cp-section"><b>Что заводим</b>
           <ul>
             <li><span class="kv-value mono">hello@</span> — публичный email (FB/IG bio, LinkedIn, сайт)</li>
@@ -636,7 +636,7 @@
         <div class="cp-section"><b>Что заводим</b>
           <ul>
             <li>Business: ORBITA</li>
-            <li>Domain verification для <span class="kv-value mono">visitime.app</span></li>
+            <li>Domain verification для <span class="kv-value mono">visitime.net</span></li>
             <li>Ad Account «VisiTime — Poland» (валюта PLN, TZ Warsaw)</li>
             <li>Payment method (карта компании)</li>
             <li>Data sources, users, partners (доступы для подрядчиков)</li>
@@ -668,7 +668,7 @@
             <li>Category: Software / App</li>
             <li>Username <span class="kv-value mono">@visitime</span>, обложка, описание (PL + EN)</li>
             <li>Кнопка <b>Book Now</b> → deep link в приложение</li>
-            <li>Публичный контакт: <span class="kv-value mono">hello@visitime.app</span>, WhatsApp, сайт</li>
+            <li>Публичный контакт: <span class="kv-value mono">hello@visitime.net</span>, WhatsApp, сайт</li>
             <li>Services list, About, расписание постов</li>
             <li>Добавить Page как asset в Meta BM ORBITA</li>
           </ul>
@@ -678,7 +678,7 @@
       <div class="kv-rows">
         <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">visitime.helpdesk@gmail.com</span></div>
         <div class="kv-row"><span class="kv-label">Username</span><span class="kv-value mono">visitime</span></div>
-        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.net</span></div>
         <div class="kv-row"><span class="kv-label">Asset в</span><span class="kv-value">Meta BM ORBITA</span></div>
       </div>
     </div>
@@ -700,7 +700,7 @@
             <li>Username <span class="kv-value mono">@visitime</span>, аватар, bio на польском</li>
             <li>Link-in-bio (Linktree или свой лендинг)</li>
             <li>Highlights: «Jak to działa», «Dla salonów», «Opinie», «Promocje»</li>
-            <li>Contact button: <span class="kv-value mono">hello@visitime.app</span> + WhatsApp</li>
+            <li>Contact button: <span class="kv-value mono">hello@visitime.net</span> + WhatsApp</li>
             <li>Привязка к FB Page через Meta BM</li>
             <li>Переключить в Business account (для статистики и Ads)</li>
           </ul>
@@ -710,7 +710,7 @@
       <div class="kv-rows">
         <div class="kv-row"><span class="kv-label">Логин</span><span class="kv-value mono">visitime.helpdesk@gmail.com</span></div>
         <div class="kv-row"><span class="kv-label">Username</span><span class="kv-value mono">@visitime</span></div>
-        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.net</span></div>
       </div>
     </div>
 
@@ -738,7 +738,7 @@
       </div>
       <div class="card-divider"></div>
       <div class="kv-rows">
-        <div class="kv-row"><span class="kv-label">Website</span><span class="kv-value mono">visitime.app</span></div>
+        <div class="kv-row"><span class="kv-label">Website</span><span class="kv-value mono">visitime.net</span></div>
         <div class="kv-row"><span class="kv-label">Управление</span><span class="kv-value">Meta BM ORBITA</span></div>
       </div>
     </div>
@@ -786,7 +786,7 @@
         <div class="cp-section"><b>Что заводим</b>
           <ul>
             <li>Ad Account Poland (валюта PLN)</li>
-            <li>TikTok Pixel на <span class="kv-value mono">visitime.app</span></li>
+            <li>TikTok Pixel на <span class="kv-value mono">visitime.net</span></li>
             <li>Events: <span class="kv-value mono">ViewContent</span>, <span class="kv-value mono">Registration</span>, <span class="kv-value mono">CompletePayment</span></li>
             <li>Custom Audiences из пикселя</li>
             <li>Spark Ads — промо органических видео с @visitime</li>
@@ -867,9 +867,9 @@
           <div class="service-name">LinkedIn Company Page</div>
           <div class="service-desc">linkedin.com/company/visitime · B2B</div>
         </div>
-        <a href="https://www.linkedin.com/company/setup/new/" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
+        <a href="https://www.linkedin.com/company/visitime" target="_blank" class="card-open-link">Открыть <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M5 2h5v5"/></svg></a>
       </div>
-      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #21</span><span class="badge badge-orbita">личный LinkedIn</span><span class="badge badge-project">B2B</span></div>
+      <div class="badges"><span class="badge badge-phase badge-p4">P4 · #21</span><span class="badge badge-orbita">✅ Live</span><span class="badge badge-project">B2B</span></div>
       <div class="card-purpose">
         <div class="cp-section"><b>Зачем</b>B2B-канал продаж салонам красоты. Outbound ведётся через личный LinkedIn Yurii, а Company Page — легитимация («это не частник, это компания») и точка сбора кейсов, отзывов, вакансий.</div>
         <div class="cp-section"><b>Что заводим</b>
@@ -886,7 +886,7 @@
       <div class="kv-rows">
         <div class="kv-row"><span class="kv-label">Создаётся</span><span class="kv-value">через личный LinkedIn Yurii</span></div>
         <div class="kv-row"><span class="kv-label">Notifications</span><span class="kv-value mono">orbita.helpdesk@gmail.com</span></div>
-        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.net</span></div>
       </div>
     </div>
 
@@ -945,7 +945,7 @@
       <div class="card-divider"></div>
       <div class="kv-rows">
         <div class="kv-row"><span class="kv-label">Phone</span><span class="kv-value">+48 ... (через Twilio VisiTime)</span></div>
-        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.app</span></div>
+        <div class="kv-row"><span class="kv-label">Публично</span><span class="kv-value mono">hello@visitime.net</span></div>
       </div>
     </div>
 
